@@ -1532,7 +1532,7 @@ async function startup(){
   }
   const cfg = getGhCfg();
   const gisId = localStorage.getItem('gv_gis_client_id') || APP_CONFIG.gisClientId || '';
-  if(cfg && cfg.owner && cfg.repo && cfg.pat && gisId){
+  if(cfg && cfg.owner && cfg.repo && (cfg.pat || cfg.apiBase) && gisId){
     // Show login immediately; load data in background
     showPg('pg-login');
     initGIS(gisId);
