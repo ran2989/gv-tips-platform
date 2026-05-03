@@ -1,52 +1,60 @@
 {
-  "acc": [],
+  "acc": [
+    {
+      "id": "ran@visioncreator.co.kr",
+      "email": "ran@visioncreator.co.kr",
+      "name": "Ran Mo",
+      "role": "admin",
+      "at": "2026-05-03T06:03:42.612Z"
+    }
+  ],
   "rv": [],
   "pf": [
     {
       "id": "pf_potatonet",
-      "name": "포테이토넷",
-      "sector": "AI / 교육기술",
-      "ceo": "신경아",
+      "name": "í¬íì´í ë·",
+      "sector": "AI / êµì¡ê¸°ì ",
+      "ceo": "ì ê²½ì",
       "ceoPhone": "010-4268-3040",
       "email": "everska@potatonet.ai",
       "bizNo": "469-88-02199",
-      "address": "서울 광진구 능동로 120 창의관 312호",
+      "address": "ìì¸ ê´ì§êµ¬ ë¥ëë¡ 120 ì°½ìê´ 312í¸",
       "investAmt": 100,
       "investDate": "2025-12-19",
       "tipsStart": "2025-12-01",
       "tipsEnd": "2027-11-30",
       "contacts": [
         {
-          "name": "신경아",
-          "role": "대표",
+          "name": "ì ê²½ì",
+          "role": "ëí",
           "phone": "010-4268-3040",
           "office": "02-468-0118",
           "email": "everska@potatonet.ai",
           "note": ""
         },
         {
-          "name": "김재효",
-          "role": "주주",
+          "name": "ê¹ì¬í¨",
+          "role": "ì£¼ì£¼",
           "phone": "010-4267-3040",
           "office": "02-468-0118",
           "email": "",
-          "note": "주주(9.63%)"
+          "note": "ì£¼ì£¼(9.63%)"
         },
         {
-          "name": "하윤경",
-          "role": "주주",
+          "name": "íì¤ê²½",
+          "role": "ì£¼ì£¼",
           "phone": "010-2236-6559",
           "office": "02-468-0118",
           "email": "",
-          "note": "주주(0.42%)"
+          "note": "ì£¼ì£¼(0.42%)"
         },
         {
-          "name": "김지은",
-          "role": "주주",
+          "name": "ê¹ì§ì",
+          "role": "ì£¼ì£¼",
           "phone": "010-3032-2499",
           "office": "02-468-0118",
           "email": "",
-          "note": "주주(0.42%)"
+          "note": "ì£¼ì£¼(0.42%)"
         }
       ],
       "color": "#2E4DA3",
