@@ -1,0 +1,60 @@
+{
+  "acc": [],
+  "rv": [],
+  "pf": [
+    {
+      "id": "pf_potatonet",
+      "name": "포테이토넷",
+      "sector": "AI / 교육기술",
+      "ceo": "신경아",
+      "ceoPhone": "010-4268-3040",
+      "email": "everska@potatonet.ai",
+      "bizNo": "469-88-02199",
+      "address": "서울 광진구 능동로 120 창의관 312호",
+      "investAmt": 100,
+      "investDate": "2025-12-19",
+      "tipsStart": "2025-12-01",
+      "tipsEnd": "2027-11-30",
+      "contacts": [
+        {
+          "name": "신경아",
+          "role": "대표",
+          "phone": "010-4268-3040",
+          "office": "02-468-0118",
+          "email": "everska@potatonet.ai",
+          "note": ""
+        },
+        {
+          "name": "김재효",
+          "role": "주주",
+          "phone": "010-4267-3040",
+          "office": "02-468-0118",
+          "email": "",
+          "note": "주주(9.63%)"
+        },
+        {
+          "name": "하윤경",
+          "role": "주주",
+          "phone": "010-2236-6559",
+          "office": "02-468-0118",
+          "email": "",
+          "note": "주주(0.42%)"
+        },
+        {
+          "name": "김지은",
+          "role": "주주",
+          "phone": "010-3032-2499",
+          "office": "02-468-0118",
+          "email": "",
+          "note": "주주(0.42%)"
+        }
+      ],
+      "color": "#2E4DA3",
+      "inspections": [],
+      "createdAt": "2026-05-03T06:00:49.766Z"
+    }
+  ],
+  "weightCfg": null,
+  "gsCfg": null,
+  "gsLog": []
+}
