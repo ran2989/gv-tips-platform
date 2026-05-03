@@ -843,6 +843,9 @@ tr:last-child td{border-bottom:none}
 
 <script>
 
+// Must be declared before startup() — used by applyWeights() at init time
+const DEFAULT_WEIGHTS={market:10,customer:13,pmf:17,product:15,global:1,founder:18,team:7,finance:12,risk:4,exit:3};
+
 // ═══ PRE-CONFIGURED SETTINGS ═══
 // PAT is stored securely in Cloudflare Worker env (not here).
 // API calls go to /gh/* which Worker proxies to GitHub API with the PAT.
@@ -2797,8 +2800,6 @@ function copyAppsScript(){
 
 
 // ══ WEIGHT CONFIG ══
-const DEFAULT_WEIGHTS={market:10,customer:13,pmf:17,product:15,global:1,founder:18,team:7,finance:12,risk:4,exit:3};
-
 function getWeights(){
   // Merge saved weights over defaults
   const saved=S.weightCfg||{};
