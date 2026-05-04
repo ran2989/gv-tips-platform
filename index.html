@@ -309,6 +309,13 @@ tr:last-child td{border-bottom:none}
 .conn-st.wait{background:var(--blue2);color:var(--blue3);border:1px solid var(--blue)}
 
 .page-panel{display:none}
+/* ─ YES/NO TOGGLE BTNS ─ */
+.yn-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--bdr);background:var(--surf2);font-size:11px;font-weight:600;cursor:pointer;color:var(--txt3);transition:.12s;font-family:inherit}
+.yn-btn:hover{border-color:var(--bdr2)}
+.yn-btn.yn-y{background:var(--green2);border-color:var(--green3);color:var(--green3)}
+.yn-btn.yn-n{background:var(--red2);border-color:var(--red3);color:var(--red3)}
+.yn-btn.yn-na{background:var(--surf3);border-color:var(--bdr2);color:var(--txt2)}
+.chk-section table tr:hover td{background:rgba(255,255,255,.02)}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -364,10 +371,10 @@ tr:last-child td{border-bottom:none}
 <div class="mainnav" id="main-nav" style="display:none">
   <div class="mnlogo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;border-radius:4px;flex-shrink:0"><rect width="28" height="28" rx="4" fill="#2E4DA3"/><ellipse cx="13" cy="14" rx="9" ry="11.5" stroke="rgba(255,255,255,0.12)" stroke-width="0.6" transform="rotate(-20 13 14)"/><ellipse cx="13" cy="14" rx="7" ry="9.5" stroke="rgba(255,255,255,0.18)" stroke-width="0.7" transform="rotate(-20 13 14)"/><ellipse cx="13" cy="14" rx="5" ry="7.5" stroke="rgba(255,255,255,0.26)" stroke-width="0.7" transform="rotate(-20 13 14)"/><ellipse cx="13" cy="14" rx="3.5" ry="5.5" stroke="rgba(255,255,255,0.38)" stroke-width="0.8" transform="rotate(-20 13 14)"/><ellipse cx="13" cy="14" rx="2" ry="3.5" stroke="rgba(255,255,255,0.55)" stroke-width="0.9" transform="rotate(-20 13 14)"/><ellipse cx="13" cy="14" rx="9" ry="11.5" stroke="rgba(255,255,255,0.07)" stroke-width="0.5" transform="rotate(20 13 14)"/><ellipse cx="13" cy="14" rx="6" ry="8.5" stroke="rgba(255,255,255,0.11)" stroke-width="0.6" transform="rotate(20 13 14)"/><ellipse cx="13" cy="14" rx="3.5" ry="5.5" stroke="rgba(255,255,255,0.18)" stroke-width="0.7" transform="rotate(20 13 14)"/><ellipse cx="11" cy="11" rx="5" ry="8" fill="rgba(255,255,255,0.3)" transform="rotate(-20 11 11)"/><g transform="translate(17.5, 3) scale(0.38)"><path d="M10 1.5 A8.5 8.5 0 1 1 17 14" stroke="white" stroke-width="2.8" fill="none" stroke-linecap="round"/><polygon points="10,5.5 17,9.5 10,13.5" fill="white"/><rect x="10" y="8" width="4" height="3.5" fill="white" rx="0.5"/></g></svg><span style="font-weight:800;letter-spacing:.3px">그래비티벤처스</span></div>
   <div class="mnmenu">
-    <div class="mnitem on" id="mn-portfolio" onclick="setMainTab('portfolio')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>정기점검</div>
+    <div class="mnitem on" id="mn-portfolio" onclick="setMainTab('portfolio')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>TIPS 정기점검</div>
     <div class="mndivider"></div>
     <div style="display:flex;align-items:center;padding:0 6px;font-size:10px;color:var(--txt3);font-weight:700;letter-spacing:.5px;text-transform:uppercase">신규 TIPS</div>
-    <div class="mnitem" id="mn-req" onclick="setMainTab('req')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>1차 요건검토</div>
+    <div class="mnitem" id="mn-req" onclick="setMainTab('req')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>신규 TIPS 요건검토</div>
     <div class="mnitem" id="mn-screen" onclick="setMainTab('screen')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>사전심사</div>
   </div>
   <div class="mnright">
@@ -380,7 +387,7 @@ tr:last-child td{border-bottom:none}
 <div id="panel-portfolio" class="page-panel" style="display:none">
   <div style="max-width:980px;margin:0 auto;padding:28px 24px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <div><div style="font-size:20px;font-weight:800;margin-bottom:3px">포트폴리오 정기점검</div><div style="font-size:13px;color:var(--txt2)">투자 및 TIPS 과제 수행 중인 피투자사 현황</div></div>
+      <div><div style="font-size:20px;font-weight:800;margin-bottom:3px">TIPS 정기점검</div><div style="font-size:13px;color:var(--txt2)">투자 및 TIPS 과제 수행 중인 피투자사 현황</div></div>
       <div id="pf-admin-add" style="display:none"><button class="btn btn-primary btn-sm" onclick="openAddPfModal()">+ 피투자사 추가</button></div>
     </div>
     <div id="pf-home"><div class="pf-grid" id="pf-cards-main"></div></div>
@@ -390,7 +397,7 @@ tr:last-child td{border-bottom:none}
 <div id="panel-req" class="page-panel" style="display:none">
   <div style="max-width:820px;margin:0 auto;padding:28px 24px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <div><div style="font-size:20px;font-weight:800;margin-bottom:3px">1차 요건검토</div><div style="font-size:13px;color:var(--txt2)">신규 TIPS 추천 대상 기업의 기본 자격 요건 검토 (18항목)</div></div>
+      <div><div style="font-size:20px;font-weight:800;margin-bottom:3px">신규 TIPS 요건검토</div><div style="font-size:13px;color:var(--txt2)">신규 TIPS 추천 대상 기업의 기본 자격 요건 검토 (14항목)</div></div>
       <button class="btn btn-primary btn-sm" onclick="startNewReq()">+ 새 요건검토</button>
     </div>
     <div id="req-list-view">
@@ -534,83 +541,76 @@ tr:last-child td{border-bottom:none}
       <div class="insp-num" style="background:var(--purple2);color:var(--purple)">②</div>
       <span class="section-title">TIPS 과제 진행 현황</span>
     </div>
-    <div class="grid-2" style="margin-bottom:16px">
-      <div><label class="fl">전체 과제 진행률 (%)</label><input type="number" id="insp-tips-pct" placeholder="0~100" min="0" max="100" oninput="updateTipsProg()"/></div>
+    <div class="grid-2">
+      <div><label class="fl">전체 과제 진행률 (%)</label><input type="number" id="insp-tips-pct" placeholder="0~100" min="0" max="100"/></div>
       <div><label class="fl">정부출연금 집행률 (%)</label><input type="number" id="insp-gov-pct" placeholder="0~100" min="0" max="100"/></div>
-    </div>
-    <div>
-      <div class="fl" style="margin-bottom:6px">과제 기간 내 마일스톤</div>
-      <div class="tips-progress"><div id="tips-prog-fill" class="tips-progress-fill" style="width:0%"></div></div>
-      <div id="insp-milestones" class="milestones"></div>
-      <button class="btn btn-sm" style="margin-top:10px" onclick="addMilestone()">+ 마일스톤 추가</button>
     </div>
   </div>
 
-  <!-- ③ 재무/매출 현황 -->
+  <!-- ③ 매출 -->
   <div class="insp-section">
     <div class="insp-section-header">
       <div class="insp-num" style="background:var(--green2);color:var(--green)">③</div>
-      <span class="section-title">재무 / 매출 현황</span>
+      <span class="section-title">매출</span>
     </div>
-    <div class="metric-grid">
-      <div class="metric-input"><label class="fl">MRR (백만원)</label><input type="number" id="m-mrr" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">누적 매출 (백만원)</label><input type="number" id="m-rev" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">월 Burn Rate (백만원)</label><input type="number" id="m-burn" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">Runway (개월)</label><input type="number" id="m-runway" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">임직원 수</label><input type="number" id="m-emp" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">총 투자 유치 (백만원)</label><input type="number" id="m-inv" placeholder="0"/></div>
-    </div>
+    <div id="chk-sales" class="chk-section"></div>
   </div>
 
-  <!-- ④ 고객/시장 현황 -->
+  <!-- ④ 수출 -->
   <div class="insp-section">
     <div class="insp-section-header">
-      <div class="insp-num" style="background:var(--amber2);color:var(--amber)">④</div>
-      <span class="section-title">고객 / 시장 현황</span>
+      <div class="insp-num" style="background:var(--blue2);color:var(--blue)">④</div>
+      <span class="section-title">수출</span>
     </div>
-    <div class="metric-grid" style="margin-bottom:14px">
-      <div class="metric-input"><label class="fl">활성 고객 수</label><input type="number" id="c-active" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">신규 고객 (당월)</label><input type="number" id="c-new" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">이탈 고객 (당월)</label><input type="number" id="c-churn" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">파이프라인 건수</label><input type="number" id="c-pipe" placeholder="0"/></div>
-    </div>
-    <div><label class="fl">주요 고객사 / 파트너십 현황</label><textarea id="c-partners" rows="2" placeholder="주요 고객사명, 계약 규모, MOU 체결 현황 등..."></textarea></div>
+    <div id="chk-export" class="chk-section"></div>
   </div>
 
-  <!-- ⑤ 기술개발 현황 -->
+  <!-- ⑤ 고용·구성원 -->
   <div class="insp-section">
     <div class="insp-section-header">
-      <div class="insp-num" style="background:var(--surf3);color:var(--txt)">⑤</div>
-      <span class="section-title">기술개발 현황</span>
+      <div class="insp-num" style="background:var(--amber2);color:var(--amber)">⑤</div>
+      <span class="section-title">고용·구성원</span>
     </div>
-    <div class="metric-grid" style="margin-bottom:14px">
-      <div class="metric-input"><label class="fl">특허 출원 (건)</label><input type="number" id="t-patent-app" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">특허 등록 (건)</label><input type="number" id="t-patent-reg" placeholder="0"/></div>
-      <div class="metric-input"><label class="fl">논문/인증 (건)</label><input type="number" id="t-paper" placeholder="0"/></div>
-    </div>
-    <div><label class="fl">이번 기간 주요 R&D 성과</label><textarea id="t-achievement" rows="2" placeholder="핵심 기술 개발 성과, 프로토타입 완성, 실증 결과 등..."></textarea></div>
+    <div id="chk-hr" class="chk-section"></div>
   </div>
 
-  <!-- ⑥ 주요 이슈 및 리스크 -->
+  <!-- ⑥ 투자·M&A -->
   <div class="insp-section">
     <div class="insp-section-header">
-      <div class="insp-num" style="background:var(--red2);color:var(--red)">⑥</div>
-      <span class="section-title">주요 이슈 및 리스크</span>
+      <div class="insp-num" style="background:var(--purple2);color:var(--purple)">⑥</div>
+      <span class="section-title">투자·M&A</span>
     </div>
-    <div id="risk-list"></div>
-    <button class="btn btn-sm" style="margin-top:10px" onclick="addRisk()">+ 이슈 추가</button>
+    <div id="chk-invest" class="chk-section"></div>
   </div>
 
-  <!-- ⑦ 투자자 지원 요청 -->
+  <!-- ⑦ R&D·연구비 -->
   <div class="insp-section">
     <div class="insp-section-header">
-      <div class="insp-num" style="background:var(--blue2);color:var(--blue)">⑦</div>
-      <span class="section-title">투자자 지원 요청사항</span>
+      <div class="insp-num" style="background:var(--surf3);color:var(--txt)">⑦</div>
+      <span class="section-title">R&D·연구비</span>
     </div>
-    <textarea id="insp-support" rows="3" placeholder="네트워킹, 후속투자 연계, 정부과제 연결, 채용 지원, 파트너십 소개 등 Gravity Ventures에 요청하는 지원 내용..."></textarea>
+    <div id="chk-rd" class="chk-section"></div>
   </div>
 
-  <!-- ⑧ 담당 심사역 종합 의견 -->
+  <!-- ⑧ 컴플라이언스 -->
+  <div class="insp-section">
+    <div class="insp-section-header">
+      <div class="insp-num" style="background:var(--blue2);color:var(--blue)">⑧</div>
+      <span class="section-title">컴플라이언스</span>
+    </div>
+    <div id="chk-compliance" class="chk-section"></div>
+  </div>
+
+  <!-- ⑨ 리스크·종합 -->
+  <div class="insp-section">
+    <div class="insp-section-header">
+      <div class="insp-num" style="background:var(--red2);color:var(--red)">⑨</div>
+      <span class="section-title">리스크·종합</span>
+    </div>
+    <div id="chk-risk" class="chk-section"></div>
+  </div>
+
+  <!-- ⑩ 담당 심사역 종합 의견 -->
   <div class="insp-section">
     <div class="insp-section-header">
       <div class="insp-num" style="background:var(--green2);color:var(--green)">⑧</div>
@@ -742,7 +742,7 @@ tr:last-child td{border-bottom:none}
     <div id="elig-list"></div>
   </div>
 
-  <!-- ③ 서류 제출 현황 -->
+  <!-- ③ 재무 요건 -->
   <div class="card" style="margin-bottom:14px">
     <div class="section-head">
       <div style="display:flex;align-items:center;gap:10px">
@@ -750,22 +750,16 @@ tr:last-child td{border-bottom:none}
         <span class="section-title">재무 요건</span>
       </div>
     </div>
+    <div id="fs-drop-zone" ondragover="event.preventDefault();this.style.borderColor='var(--blue3)'" ondragleave="this.style.borderColor='var(--bdr)'" ondrop="handleFsDrop(event)" style="border:2px dashed var(--bdr);border-radius:10px;padding:16px 20px;text-align:center;cursor:pointer;margin-bottom:14px;transition:.15s" onclick="document.getElementById('fs-file-inp').click()">
+      <div style="font-size:13px;color:var(--txt2);margin-bottom:4px">📄 재무제표 파일을 드래그하거나 클릭하여 업로드</div>
+      <div style="font-size:11px;color:var(--txt3)">PDF 파일에서 매출·영업이익·당기순이익·부채비율을 자동 추출합니다</div>
+      <input type="file" id="fs-file-inp" accept=".pdf,.txt" style="display:none" onchange="handleFsFile(this.files[0])"/>
+    </div>
+    <div id="fs-parse-result" style="display:none;background:var(--green2);border:1px solid var(--green);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green3);margin-bottom:12px"></div>
     <div id="docs-list"></div>
   </div>
 
-  <!-- ④ 초기 판단 점수 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="section-head">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:28px;height:28px;border-radius:7px;background:var(--blue2);color:var(--blue);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">④</div>
-        <span class="section-title">초기 판단 점수 (1-5점)</span>
-      </div>
-      <span style="font-size:11px;color:var(--txt3)">첫인상 기반 직관적 평가</span>
-    </div>
-    <div id="init-scores"></div>
-  </div>
-
-  <!-- ⑤ 종합 의견 & 사전검토 결과 -->
+  <!-- ④ 종합 의견 & 사전검토 결과 -->
   <div class="card" style="margin-bottom:24px">
     <div class="section-head">
       <div style="display:flex;align-items:center;gap:10px">
@@ -882,12 +876,13 @@ const ELIG_ITEMS=[
   // 3. 투자 요건
   {id:'e7',group:'투자 요건',title:'투자 방식',sub:'운영사 직접 투자 여부'},
   {id:'e8',group:'투자 요건',title:'투자금액',sub:'2억원 (지방소재 1억원)'},
-  {id:'e9',group:'투자 요건',title:'집행 기한',sub:'협약 후 2개월 내 납입 가능 여부'},
+  {id:'e9',group:'투자 요건',title:'본사 소재지',sub:'수도권(서울, 경기, 인천) 이외 지역'},
   // 4. 기술성/사업성
   {id:'e10',group:'기술성/사업성',title:'기술성',sub:'TIPS 과제 연계 가능한 기술 영역 여부'},
   {id:'e11',group:'기술성/사업성',title:'R&D 연계성',sub:'R&D 수행 역량 및 의지 확인'},
   {id:'e12',group:'기술성/사업성',title:'시장성',sub:'투자 가능한 수준의 시장 규모 여부'},
   {id:'e13',group:'기술성/사업성',title:'매출 트랙션',sub:'초기 매출 또는 PoC 실적 존재 여부'},
+  {id:'e14',group:'기술성/사업성',title:'NTIS 유사도',sub:'유사 과제 검색 결과 기준 충족 여부'},
 ];
 const DOC_ITEMS=[
   {id:'d1',title:'2025년 매출',sub:'수치 기재 (백만원)',type:'number',unit:'백만원'},
@@ -1048,6 +1043,7 @@ let CCIDX = 0;   // current category index
 
 function setMainTab(tab){
   MAIN_TAB = tab;
+  showPg('pg-main');
   ['portfolio','req','screen'].forEach(t => {
     const mn = document.getElementById('mn-'+t);
     const panel = document.getElementById('panel-'+t);
@@ -1184,11 +1180,11 @@ function startInspectionFromPanel(){
   document.getElementById('insp-date').value = new Date().toISOString().slice(0,10);
   document.getElementById('insp-type').value = 'monthly';
   document.getElementById('insp-manager').value = CU.name;
-  ['insp-tips-pct','insp-gov-pct','m-mrr','m-rev','m-burn','m-runway','m-emp','m-inv',
-   'c-active','c-new','c-churn','c-pipe','t-patent-app','t-patent-reg','t-paper'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  ['c-partners','t-achievement','insp-support','insp-opinion'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('tips-prog-fill').style.width='0%';
-  renderMilestones(); renderRisks(); renderHealthBtns(0);
+  ['insp-tips-pct','insp-gov-pct'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  var opinEl=document.getElementById('insp-opinion');if(opinEl)opinEl.value='';
+  INSP_CHK={};
+  renderInspChecklists({});
+  renderHealthBtns(0);
   showPg('pg-insp');
 }
 
@@ -1864,19 +1860,160 @@ function startInspection(){
   document.getElementById('insp-manager').value=CU.name;
   document.getElementById('insp-tips-pct').value='';
   document.getElementById('insp-gov-pct').value='';
-  ['m-mrr','m-rev','m-burn','m-runway','m-emp','m-inv','c-active','c-new','c-churn','c-pipe'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  ['c-partners','t-achievement','insp-support','insp-opinion'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('t-patent-app').value='';document.getElementById('t-patent-reg').value='';document.getElementById('t-paper').value='';
-  document.getElementById('tips-prog-fill').style.width='0%';
-  renderMilestones();renderRisks();renderHealthBtns(0);
+  var opinEl=document.getElementById('insp-opinion');if(opinEl)opinEl.value='';
+  INSP_CHK={};
+  renderInspChecklists({});
+  renderHealthBtns(0);
   showPg('pg-insp');
 }
 
 function backToPfDetail(){openPfDetail(CUR_PF_ID);}
 
-function updateTipsProg(){
-  const v=parseInt(document.getElementById('insp-tips-pct').value)||0;
-  document.getElementById('tips-prog-fill').style.width=Math.min(100,v)+'%';
+// ══ INSPECTION CHECKLIST ══
+const INSP_CHK_DEF=[
+  {sectionId:'sales',items:[
+    {id:'sales_yn',label:'매출 발생 여부(과제 기반)',criteria:'목표: 10억원/년',type:'yn'},
+    {id:'sales_acc',label:'└ 누적 매출',criteria:'',type:'number',unit:'억원',indent:true},
+    {id:'sales_rel',label:'└ 과제 관련성',criteria:'관련, 일부, 무관',type:'select',options:['관련','일부','무관'],indent:true},
+  ]},
+  {sectionId:'export',items:[
+    {id:'export_yn',label:'수출 발생 여부',criteria:'목표: 50만불/년',type:'yn'},
+    {id:'export_acc',label:'└ 누적 수출',criteria:'',type:'number',unit:'만달러',indent:true},
+  ]},
+  {sectionId:'hr',items:[
+    {id:'hr_founder',label:'창업 구성원 현황',criteria:'이탈/신규 확인 목표: 15명 신규고용',type:'yn'},
+    {id:'hr_total',label:'└ 현재 총 임직원',criteria:'4대보험 가입자',type:'number',unit:'명',indent:true},
+    {id:'hr_new',label:'└ 신규 6개월↑ 근무자',criteria:'성공조건 인정 기준',type:'number',unit:'명',indent:true},
+    {id:'hr_fs',label:'창업자 지분율 60%↑ 유지',criteria:'60% 이상 유지 여부',type:'yn'},
+    {id:'hr_os',label:'운영사 지분율 30%↓ 유지',criteria:'30% 이하 유지 여부',type:'yn'},
+  ]},
+  {sectionId:'invest',items:[
+    {id:'invest_yn',label:'투자 유치 현황',criteria:'자금/경영 이상 여부 25년 기준: 25.9억↑',type:'yn'},
+    {id:'invest_acc',label:'└ 누적 투자',criteria:'TIPS 선정 후 후속투자',type:'number',unit:'억원',indent:true},
+    {id:'invest_inst',label:'└ 투자자(기관명)',criteria:'',type:'text',indent:true},
+    {id:'invest_ma',label:'M&A',criteria:'목표: 10억원 이상',type:'number',unit:'억원'},
+    {id:'invest_ipo',label:'IPO 준비 현황',criteria:'KONEX/KOSDAQ/NASDAQ',type:'text'},
+  ]},
+  {sectionId:'rd',items:[
+    {id:'rd_prog',label:'R&D 진행률',criteria:'개발 대비 진행률',type:'yn'},
+    {id:'rd_exec',label:'연구개발비 집행률',criteria:'사비 집행 현황',type:'yn'},
+    {id:'rd_plan',label:'연구계획 이행 여부',criteria:'연구계획 이행 확인',type:'yn'},
+    {id:'rd_rcms',label:'증빙/RCMS 제출 여부',criteria:'RCMS 제출 여부 확인',type:'yn'},
+    {id:'rd_note',label:'연구노트 작성',criteria:'작성 확인 필요(진행 진척)',type:'text'},
+  ]},
+  {sectionId:'compliance',items:[
+    {id:'comp_addr',label:'주소지 유지 여부',criteria:'비수도권 주소지 유지',type:'yn'},
+    {id:'comp_task',label:'수행과제 제한 준수',criteria:'동시수행과제 2건 이하',type:'yn'},
+  ]},
+  {sectionId:'risk',items:[
+    {id:'risk_items',label:'리스크/특이사항',criteria:'경영상태, 지분변동, 인력이탈',type:'text'},
+    {id:'risk_eval',label:'최종평가 달성 가능성',criteria:'매월 종합 판단',type:'text'},
+  ]},
+];
+let INSP_CHK={};
+
+function renderInspChecklists(chk){
+  INSP_CHK_DEF.forEach(function(sec){
+    const el=document.getElementById('chk-'+sec.sectionId);
+    if(!el) return;
+    let h='<table style="width:100%;border-collapse:collapse">';
+    h+='<thead><tr style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--txt3)">';
+    h+='<th style="text-align:left;padding:4px 8px;font-weight:700">점검 항목</th>';
+    h+='<th style="text-align:left;padding:4px 8px;font-weight:700">기준 / 목표</th>';
+    h+='<th style="padding:4px 8px;font-weight:700;white-space:nowrap">결과</th>';
+    h+='<th style="text-align:left;padding:4px 8px;font-weight:700">수치 / 비고</th>';
+    h+='</tr></thead><tbody>';
+    sec.items.forEach(function(item){
+      var val=chk[item.id]||'';
+      var labelStyle='padding:8px;font-size:13px;font-weight:'+(item.indent?'400':'600')+';color:'+(item.indent?'var(--txt2)':'var(--txt)');
+      var criteriaHtml='<td style="padding:8px;font-size:11px;color:var(--txt3)">'+escH(item.criteria)+'</td>';
+      var resultHtml='';
+      var detailHtml='<td style="padding:8px"></td>';
+      if(item.type==='yn'){
+        var yActive=val==='y',nActive=val==='n',naActive=val==='na';
+        resultHtml='<td style="padding:8px;white-space:nowrap"><div style="display:flex;gap:4px">'
+          +'<button class="yn-btn'+(yActive?' yn-y':'')+'" onclick="setInspChk(\''+item.id+'\',\'y\',this)">✅ Y</button>'
+          +'<button class="yn-btn'+(nActive?' yn-n':'')+'" onclick="setInspChk(\''+item.id+'\',\'n\',this)">❌ N</button>'
+          +'<button class="yn-btn'+(naActive?' yn-na':'')+'" onclick="setInspChk(\''+item.id+'\',\'na\',this)">— N/A</button>'
+          +'</div></td>';
+      } else if(item.type==='number'){
+        resultHtml='<td style="padding:8px"></td>';
+        detailHtml='<td style="padding:8px"><div style="display:flex;align-items:center;gap:5px">'
+          +'<input type="number" value="'+(val||'')+'" data-chk-id="'+item.id+'" oninput="setInspChkVal(\''+item.id+'\',this.value)" style="width:90px;padding:5px 8px;border:1px solid var(--bdr);border-radius:5px;background:var(--surf2);color:var(--txt);font-size:12px" placeholder="0"/>'
+          +(item.unit?'<span style="font-size:11px;color:var(--txt2)">'+item.unit+'</span>':'')
+          +'</div></td>';
+      } else if(item.type==='select'){
+        resultHtml='<td style="padding:8px"></td>';
+        var selOpts=(item.options||[]).map(function(o){return'<option value="'+o+'"'+(val===o?' selected':'')+'>'+o+'</option>';}).join('');
+        detailHtml='<td style="padding:8px"><select data-chk-id="'+item.id+'" onchange="setInspChkVal(\''+item.id+'\',this.value)" style="padding:5px 8px;border:1px solid var(--bdr);border-radius:5px;background:var(--surf2);color:var(--txt);font-size:12px"><option value="">선택</option>'+selOpts+'</select></td>';
+      } else {
+        resultHtml='<td style="padding:8px"></td>';
+        detailHtml='<td style="padding:8px"><input type="text" value="'+escH(String(val))+'" data-chk-id="'+item.id+'" oninput="setInspChkVal(\''+item.id+'\',this.value)" style="width:100%;padding:5px 8px;border:1px solid var(--bdr);border-radius:5px;background:var(--surf2);color:var(--txt);font-size:12px" placeholder="내용 입력"/></td>';
+      }
+      h+='<tr style="border-bottom:1px solid var(--bdr)"><td style="'+labelStyle+'">'+escH(item.label)+'</td>'+criteriaHtml+resultHtml+detailHtml+'</tr>';
+    });
+    h+='</tbody></table>';
+    el.innerHTML=h;
+  });
+}
+
+function setInspChk(id,val,btn){
+  if(INSP_CHK[id]===val) val='';
+  INSP_CHK[id]=val;
+  const row=btn.closest('tr');
+  row.querySelectorAll('.yn-btn').forEach(function(b){b.classList.remove('yn-y','yn-n','yn-na');});
+  if(val==='y') btn.classList.add('yn-y');
+  else if(val==='n') btn.classList.add('yn-n');
+  else if(val==='na') btn.classList.add('yn-na');
+}
+
+function setInspChkVal(id,val){INSP_CHK[id]=val;}
+
+// PDF/text financial statement parser
+function handleFsDrop(e){
+  e.preventDefault();
+  e.currentTarget.style.borderColor='var(--bdr)';
+  var file=e.dataTransfer.files[0];
+  if(file) handleFsFile(file);
+}
+
+function handleFsFile(file){
+  if(!file) return;
+  var result=document.getElementById('fs-parse-result');
+  result.style.background='var(--blue2)';result.style.borderColor='var(--blue)';result.style.color='var(--blue3)';
+  result.style.display='block';result.textContent='⏳ 파일 분석 중...';
+  var reader=new FileReader();
+  reader.onload=function(e){ parseFinancialText(e.target.result||''); };
+  reader.onerror=function(){ result.textContent='❌ 파일을 읽을 수 없습니다.'; };
+  try { reader.readAsText(file,'utf-8'); } catch(err){ result.textContent='❌ '+err.message; }
+}
+
+function parseFinancialText(text){
+  var result=document.getElementById('fs-parse-result');
+  var filled=[];
+  function extractNum(patterns){
+    for(var i=0;i<patterns.length;i++){var m=text.match(patterns[i]);if(m){var n=parseFloat(m[1].replace(/,/g,''));if(!isNaN(n))return n;}}
+    return null;
+  }
+  var rev=extractNum([/매출액?\s*[:：]\s*([0-9,]+(?:\.[0-9]+)?)/,/당기매출액?\s*([0-9,]+)/]);
+  var op=extractNum([/영업이익\s*[:：]\s*(-?[0-9,]+(?:\.[0-9]+)?)/]);
+  var net=extractNum([/당기순이익\s*[:：]\s*(-?[0-9,]+(?:\.[0-9]+)?)/,/당기순손익\s*[:：]\s*(-?[0-9,]+)/]);
+  var debt=extractNum([/부채비율\s*[:：]\s*([0-9.]+)/]);
+  function fillDocField(docId,val){
+    var el=document.querySelector('[data-doc-id="'+docId+'"]');
+    if(el&&val!==null){el.value=Math.round(val/1000000);return true;}return false;
+  }
+  if(rev!==null&&fillDocField('d1',rev)) filled.push('매출액');
+  if(op!==null&&fillDocField('d2',op)) filled.push('영업이익');
+  if(net!==null&&fillDocField('d3',net)) filled.push('당기순이익');
+  if(debt!==null){var el=document.querySelector('[data-doc-id="d4"]');if(el){el.value=debt;filled.push('부채비율');}}
+  if(filled.length>0){
+    result.style.background='var(--green2)';result.style.borderColor='var(--green)';result.style.color='var(--green3)';
+    result.textContent='✓ 자동 추출 완료: '+filled.join(', ');
+  } else {
+    result.style.background='var(--amber2)';result.style.borderColor='var(--amber)';result.style.color='var(--amber3)';
+    result.textContent='⚠ 자동 추출 실패. 숫자를 직접 입력해주세요. (텍스트 기반 PDF만 지원)';
+  }
 }
 
 function renderMilestones(){
@@ -1919,37 +2056,17 @@ function setHealth(n){INSP_HEALTH=INSP_HEALTH===n?0:n;renderHealthBtns(INSP_HEAL
 
 function saveInspection(){
   const pf=S.pf.find(p=>p.id===CUR_PF_ID);
+  if(!document.getElementById('insp-date').value){alert('점검 기준일을 입력하세요.');return;}
+  // Collect live checklist values from DOM
+  document.querySelectorAll('[data-chk-id]').forEach(function(el){INSP_CHK[el.getAttribute('data-chk-id')]=el.value;});
   const ins={
     id:'i'+Date.now(),
-    date:document.getElementById('insp-date').value||new Date().toISOString().slice(0,10),
+    date:document.getElementById('insp-date').value,
     type:document.getElementById('insp-type').value,
     manager:document.getElementById('insp-manager').value,
     tipsPct:parseInt(document.getElementById('insp-tips-pct').value)||0,
     govPct:parseInt(document.getElementById('insp-gov-pct').value)||0,
-    milestones:[...INSP_MILESTONES],
-    metrics:{
-      mrr:parseFloat(document.getElementById('m-mrr').value)||0,
-      rev:parseFloat(document.getElementById('m-rev').value)||0,
-      burn:parseFloat(document.getElementById('m-burn').value)||0,
-      runway:parseFloat(document.getElementById('m-runway').value)||0,
-      emp:parseInt(document.getElementById('m-emp').value)||0,
-      inv:parseFloat(document.getElementById('m-inv').value)||0,
-    },
-    customers:{
-      active:parseInt(document.getElementById('c-active').value)||0,
-      new:parseInt(document.getElementById('c-new').value)||0,
-      churn:parseInt(document.getElementById('c-churn').value)||0,
-      pipe:parseInt(document.getElementById('c-pipe').value)||0,
-      partners:document.getElementById('c-partners').value,
-    },
-    tech:{
-      patentApp:parseInt(document.getElementById('t-patent-app').value)||0,
-      patentReg:parseInt(document.getElementById('t-patent-reg').value)||0,
-      paper:parseInt(document.getElementById('t-paper').value)||0,
-      achievement:document.getElementById('t-achievement').value,
-    },
-    risks:[...INSP_RISKS],
-    support:document.getElementById('insp-support').value,
+    chk:Object.assign({},INSP_CHK),
     opinion:document.getElementById('insp-opinion').value,
     health:INSP_HEALTH,
     createdAt:new Date().toISOString(),
@@ -1969,56 +2086,25 @@ function viewInspection(inspId){
   const riskColor={low:['#E1F5EE','#085041'],mid:['#FAEEDA','#633806'],high:['#FCEBEB','#791F1F']};
 
   document.getElementById('iv-nav-co').textContent=pf.name;
-  document.getElementById('iv-body').innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <div>
-        <div style="font-size:22px;font-weight:800">${pf.name} 정기점검</div>
-        <div style="font-size:13px;color:var(--txt2);margin-top:4px">${ins.date} · ${TTYPE[ins.type]||ins.type} · 담당: ${ins.manager||'-'}</div>
-      </div>
-      ${ins.health?`<div style="padding:14px 22px;border-radius:10px;background:${sb(ins.health)};border:2px solid ${sc(ins.health)+'66'};text-align:center">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:${sc(ins.health)};margin-bottom:3px">기업 건강도</div>
-        <div style="font-size:22px;font-weight:800;color:${sc(ins.health)}">${ins.health}점 · ${HL[ins.health]}</div>
-      </div>`:''}
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-      <div class="card">
-        <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">과제 진행 현황</div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>전체 진행률</span><strong>${ins.tipsPct}%</strong></div>
-        <div class="tips-progress"><div class="tips-progress-fill" style="width:${ins.tipsPct}%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:10px"><span>정부출연금 집행</span><strong>${ins.govPct}%</strong></div>
-        ${ins.milestones&&ins.milestones.length?`<div style="margin-top:12px">${ins.milestones.map(m=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px"><span style="width:18px;height:18px;border-radius:4px;background:${m.done?'var(--green)':'var(--surf2)'};display:flex;align-items:center;justify-content:center;font-size:10px;color:${m.done?'#fff':'var(--txt3)'}">${m.done?'✓':''}</span><span style="color:${m.done?'var(--txt)':'var(--txt2)'}">${m.text}</span></div>`).join('')}</div>`:''}
-      </div>
-      <div class="card">
-        <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">재무 현황</div>
-        ${[['MRR',ins.metrics?.mrr,'백만원'],['누적 매출',ins.metrics?.rev,'백만원'],['Burn Rate',ins.metrics?.burn,'백만원/월'],['Runway',ins.metrics?.runway,'개월'],['임직원',ins.metrics?.emp,'명'],['총 투자유치',ins.metrics?.inv,'백만원']].map(([k,v,u])=>v?`<div style="display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--bdr)"><span style="color:var(--txt2)">${k}</span><strong>${v}${u}</strong></div>`:'').join('')}
-      </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-      <div class="card">
-        <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">고객 현황</div>
-        ${[['활성 고객',ins.customers?.active,'개사'],['신규 고객',ins.customers?.new,'개사'],['이탈 고객',ins.customers?.churn,'개사'],['파이프라인',ins.customers?.pipe,'건']].map(([k,v,u])=>v!==undefined?`<div style="display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--bdr)"><span style="color:var(--txt2)">${k}</span><strong>${v}${u}</strong></div>`:'').join('')}
-        ${ins.customers?.partners?`<div style="margin-top:10px;font-size:12px;color:var(--txt2);line-height:1.6">${ins.customers.partners}</div>`:''}
-      </div>
-      <div class="card">
-        <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">기술개발 현황</div>
-        ${[['특허 출원',ins.tech?.patentApp,'건'],['특허 등록',ins.tech?.patentReg,'건'],['논문/인증',ins.tech?.paper,'건']].map(([k,v,u])=>v!==undefined?`<div style="display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--bdr)"><span style="color:var(--txt2)">${k}</span><strong>${v}${u}</strong></div>`:'').join('')}
-        ${ins.tech?.achievement?`<div style="margin-top:10px;font-size:12px;color:var(--txt2);line-height:1.6">${ins.tech.achievement}</div>`:''}
-      </div>
-    </div>
-
-    ${ins.risks&&ins.risks.length?`<div class="card" style="margin-bottom:14px">
-      <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">주요 이슈 및 리스크</div>
-      ${ins.risks.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr)">
-        <span style="padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;background:${riskColor[r.level||'mid'][0]};color:${riskColor[r.level||'mid'][1]};flex-shrink:0">${r.level==='low'?'낮음':r.level==='high'?'높음':'중간'}</span>
-        <span style="font-size:13px">${r.text}</span>
-      </div>`).join('')}
-    </div>`:''}
-
-    ${ins.support?`<div class="card" style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">투자자 지원 요청</div><div style="font-size:13px;color:var(--txt2);line-height:1.7">${ins.support}</div></div>`:''}
-    ${ins.opinion?`<div class="card" style="margin-bottom:32px"><div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">담당 심사역 종합 의견</div><div style="font-size:13px;color:var(--txt2);line-height:1.7">${ins.opinion}</div></div>`:''}
-  `;
+  var chk=ins.chk||{};
+  var ynLabel=function(v){if(v==='y')return'<span style="color:var(--green3);font-weight:700">✅ Y</span>';if(v==='n')return'<span style="color:var(--red3);font-weight:700">❌ N</span>';if(v==='na')return'<span style="color:var(--txt2)">— N/A</span>';return'<span style="color:var(--txt3)">미입력</span>';};
+  var chkHtml='';
+  if(Object.keys(chk).length>0){
+    var secLabels={sales:'매출',export:'수출',hr:'고용·구성원',invest:'투자·M&A',rd:'R&D·연구비',compliance:'컴플라이언스',risk:'리스크·종합'};
+    INSP_CHK_DEF.forEach(function(sec){
+      var rows=sec.items.map(function(item){
+        var val=chk[item.id]||'';
+        var valHtml=item.type==='yn'?ynLabel(val):'<span style="color:var(--txt)">'+escH(String(val||'-'))+(item.unit?' '+item.unit:'')+'</span>';
+        return'<tr style="border-bottom:1px solid var(--bdr)"><td style="padding:8px;font-size:13px;color:'+(item.indent?'var(--txt2)':'var(--txt)')+';font-weight:'+(item.indent?'400':'600')+'">'+escH(item.label)+'</td><td style="padding:8px;font-size:11px;color:var(--txt3)">'+escH(item.criteria||'')+'</td><td style="padding:8px;text-align:center">'+valHtml+'</td></tr>';
+      }).join('');
+      chkHtml+='<div class="card" style="margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">'+escH(secLabels[sec.sectionId]||sec.sectionId)+'</div><table style="width:100%;border-collapse:collapse"><thead><tr style="font-size:10px;color:var(--txt3);text-transform:uppercase"><th style="text-align:left;padding:4px 8px">항목</th><th style="text-align:left;padding:4px 8px">기준</th><th style="padding:4px 8px">결과</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+    });
+  }
+  document.getElementById('iv-body').innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px"><div><div style="font-size:22px;font-weight:800">'+escH(pf.name)+' 정기점검</div><div style="font-size:13px;color:var(--txt2);margin-top:4px">'+ins.date+' · '+(TTYPE[ins.type]||ins.type)+' · 담당: '+(ins.manager||'-')+'</div></div>'+(ins.health?'<div style="padding:14px 22px;border-radius:10px;background:'+sb(ins.health)+';border:2px solid '+sc(ins.health)+'66;text-align:center"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:'+sc(ins.health)+';margin-bottom:3px">기업 건강도</div><div style="font-size:22px;font-weight:800;color:'+sc(ins.health)+'">'+ins.health+'점 · '+HL[ins.health]+'</div></div>':'')+'</div>'
+  +'<div class="card" style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">과제 진행 현황</div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>전체 진행률</span><strong>'+ins.tipsPct+'%</strong></div><div class="tips-progress"><div class="tips-progress-fill" style="width:'+ins.tipsPct+'%"></div></div><div style="display:flex;justify-content:space-between;font-size:13px;margin-top:8px"><span>정부출연금 집행</span><strong>'+ins.govPct+'%</strong></div></div>'
+  +chkHtml
+  +(ins.opinion?'<div class="card" style="margin-bottom:32px"><div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">담당 심사역 종합 의견</div><div style="font-size:13px;color:var(--txt2);line-height:1.7">'+escH(ins.opinion)+'</div></div>':'')
+  +'<div style="text-align:right;padding-bottom:40px"><button class="bghost" onclick="backToPfDetail()">← 점검 이력으로</button></div>';
   showPg('pg-insp-view');
 }
 
@@ -2060,12 +2146,11 @@ function loadPreForm(r){
   docsEl.innerHTML=DOC_ITEMS.map(item=>{
     const val=(p.docs||{})[item.id]||'';
     const inputHtml=item.type==='number'
-      ?`<div style="display:flex;align-items:center;gap:6px"><input type="number" value="${val}" oninput="setDocVal('${item.id}',this.value)" style="width:120px;text-align:right" placeholder="0"/><span style="font-size:12px;color:var(--txt2)">${item.unit}</span></div>`
-      :`<input type="text" value="${val}" oninput="setDocVal('${item.id}',this.value)" placeholder="내용 입력" style="width:220px"/>`;
-    return`<div class="chk-item"><div class="chk-left"><div class="chk-title">${item.title}</div><div class="chk-sub">${item.sub}</div></div><div class="chk-right">${inputHtml}</div></div>`;
+      ?'<div style="display:flex;align-items:center;gap:6px"><input type="number" value="'+val+'" data-doc-id="'+item.id+'" oninput="setDocVal(\''+item.id+'\',this.value)" style="width:120px;text-align:right" placeholder="0"/><span style="font-size:12px;color:var(--txt2)">'+item.unit+'</span></div>'
+      :'<input type="text" value="'+escH(String(val))+'" data-doc-id="'+item.id+'" oninput="setDocVal(\''+item.id+'\',this.value)" placeholder="내용 입력" style="width:220px"/>';
+    return'<div class="chk-item"><div class="chk-left"><div class="chk-title">'+item.title+'</div><div class="chk-sub">'+item.sub+'</div></div><div class="chk-right">'+inputHtml+'</div></div>';
   }).join('');
-  const isEl=document.getElementById('init-scores');
-  isEl.innerHTML=INIT_SCORES.map(item=>{const v=(p.initSc||{})[item.id]||0;const btns=[1,2,3,4,5].map(n=>`<button class="star${v===n?' on'+n:''}" onclick="setInitSc('${item.id}',${n},this)">${n}</button>`).join('');const lbl=v?`<span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;background:${sb(v)};color:${sc(v)}">${SL[v]}</span>`:'';return`<div class="chk-item"><div class="chk-left"><div class="chk-title">${item.label}</div><div class="chk-sub">${item.hint}</div></div><div class="chk-right"><div class="starrow">${btns}</div>${lbl}</div></div>`;}).join('');
+  // init-scores removed — no longer rendered
   const pv=p.verdict||'';
   ['pass','hold','drop'].forEach(v=>{document.getElementById('pv-'+v).classList.toggle('sel',pv===v);});
   updateStep2Btn();
@@ -3382,9 +3467,11 @@ function startNewScreen(){
   effectiveItems.forEach(function(i){r.sc[i.no]=0;});
   S.rv.push(r);sv();
   CRID=r.id;CCIDX=0;
-  // Apply snapshot cats to runtime
-  CATS.splice(0,CATS.length);effectiveCats.forEach(function(c){CATS.push(c);});
-  AITEMS.splice(0,AITEMS.length);effectiveItems.forEach(function(i){AITEMS.push(i);});
+  // Apply snapshot cats to runtime (only if different from CATS to avoid self-clear bug)
+  if(effectiveCats !== CATS){
+    CATS.splice(0,CATS.length);effectiveCats.forEach(function(c){CATS.push(c);});
+    AITEMS.splice(0,AITEMS.length);effectiveItems.forEach(function(i){AITEMS.push(i);});
+  }
   enterScreenInput(r);
 }
 
