@@ -272,7 +272,7 @@
         "44": 3
       },
       "cm": {},
-      "completed": false,
+      "completed": true,
       "catsSnapshot": [
         {
           "id": "market",
