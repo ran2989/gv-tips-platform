@@ -3805,38 +3805,46 @@ let _screenReqId = null; // 연결된 요건검토 ID
 function startNewScreen(){
   _screenReqId = null;
 
-  // 요건검토 통과 기업 목록: type==='req' 이거나 id가 'rq'로 시작하는 리뷰
-  const existingScreenCos = new Set(S.rv.filter(function(x){return !x.type||x.type==='screen';}).map(function(x){return x.co;}));
-  const passedReqs = S.rv.filter(function(r){
-    return (r.type==='req' || (r.id&&r.id.startsWith('rq')))
-      && r.preCompleted
-      && r.pre && (r.pre.verdict==='pass' || r.pre.verdict==='hold');
-  }).sort(function(a,b){return b.at.localeCompare(a.at);});
+  // 요건검토 기업 목록 — 완료 여부 무관하게 모두 표시
+  const existingScreenCos = new Set(
+    S.rv.filter(function(x){ return !x.type || x.type==='screen'; }).map(function(x){ return x.co; })
+  );
+  const reqReviews = S.rv.filter(function(r){
+    return r.type==='req' || (r.id && r.id.startsWith('rq'));
+  }).sort(function(a,b){ return b.at.localeCompare(a.at); });
 
   let reqListHtml = '';
-  if(passedReqs.length){
-    reqListHtml = '<div style="margin-bottom:14px">'
-      +'<div style="font-size:11px;font-weight:700;color:var(--green3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">✓ 요건검토 통과 기업 선택 (Step 1 → Step 2)</div>'
-      +'<div style="max-height:220px;overflow-y:auto;border:1px solid var(--bdr);border-radius:8px">';
-    passedReqs.forEach(function(r){
+  if(reqReviews.length){
+    reqListHtml = '<div style="margin-bottom:16px">'
+      +'<div style="font-size:11px;font-weight:700;color:var(--blue3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">신규 TIPS 요건검토 기업 선택 (Step 1 → Step 2)</div>'
+      +'<div style="max-height:240px;overflow-y:auto;border:1px solid var(--bdr);border-radius:8px">';
+    reqReviews.forEach(function(r){
+      var verdict = (r.pre && r.pre.verdict) || '';
+      var completed = r.preCompleted;
       var already = existingScreenCos.has(r.co);
-      reqListHtml += '<div id="req-sel-'+r.id+'" onclick="selectReqForScreen(\''+r.id+'\',\''+escH(r.co)+'\',\''+escH(r.ceo||'')+'\',this)"'
-        +' style="display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--bdr);transition:.1s;'+(already?'opacity:.5':'')+'";'
-        +' onmouseover="if(!this.classList.contains(\'selected-req\'))this.style.background=\'var(--surf3)\'"'
-        +' onmouseout="if(!this.classList.contains(\'selected-req\'))this.style.background=\'\'">'
+      var badge = '';
+      if(verdict==='pass')      badge='<span class="bp" style="font-size:10px;flex-shrink:0">Pass</span>';
+      else if(verdict==='hold') badge='<span class="bh" style="font-size:10px;flex-shrink:0">Hold</span>';
+      else if(verdict==='drop') badge='<span class="bd" style="font-size:10px;flex-shrink:0">Drop</span>';
+      else if(completed)        badge='<span class="bw" style="font-size:10px;flex-shrink:0">완료</span>';
+      else                      badge='<span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surf3);color:var(--txt3);flex-shrink:0">진행중</span>';
+      reqListHtml += '<div id="req-sel-'+r.id+'"'
+        +' onclick="selectReqForScreen(\''+r.id+'\',\''+escH(r.co)+'\',\''+escH(r.ceo||'')+'\',this)"'
+        +' style="display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--bdr);transition:.12s"'
+        +' onmouseover="if(!this.classList.contains(\'sel-req-active\'))this.style.background=\'var(--surf3)\'"'
+        +' onmouseout="if(!this.classList.contains(\'sel-req-active\'))this.style.background=\'\'">'
         +'<div style="flex:1">'
-        +'<div style="font-size:13px;font-weight:700">'+escH(r.co)+(already?' <span style="font-size:10px;color:var(--amber3)">(사전심사 진행 중)</span>':'')+'</div>'
-        +'<div style="font-size:11px;color:var(--txt2)">'+escH(r.ceo||'대표 미기재')+' · '+r.date+'</div>'
-        +'</div>'
-        +'<span class="bp" style="font-size:10px;flex-shrink:0">Pass</span>'
-        +'</div>';
+        +'<div style="font-size:13px;font-weight:700">'+escH(r.co)
+        +(already?' <span style="font-size:10px;color:var(--amber3)">이미 심사 중</span>':'')+'</div>'
+        +'<div style="font-size:11px;color:var(--txt2)">'+escH(r.ceo||'-')+' · '+r.date+'</div>'
+        +'</div>'+badge+'</div>';
     });
     reqListHtml += '</div></div>';
   }
 
   const body = reqListHtml
     +'<div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">'
-    +(passedReqs.length ? '또는 새 기업 직접 입력' : '기업 정보 입력')+'</div>'
+    +(reqReviews.length ? '또는 새 기업 직접 입력' : '기업 정보 입력')+'</div>'
     +'<div style="display:flex;flex-direction:column;gap:10px">'
     +'<div><label class="fl">기업명 *</label><input type="text" id="sc-co-inp" placeholder="(주)스타트업"/></div>'
     +'<div><label class="fl">대표자명</label><input type="text" id="sc-ceo-inp" placeholder="홍길동"/></div>'
@@ -3849,14 +3857,14 @@ function startNewScreen(){
 }
 
 function selectReqForScreen(reqId, co, ceo, el){
-  // 이전 선택 해제
   document.querySelectorAll('[id^="req-sel-"]').forEach(function(e){
-    e.classList.remove('selected-req');
+    e.classList.remove('sel-req-active');
     e.style.background='';
+    e.style.borderLeft='';
   });
-  el.classList.add('selected-req');
+  el.classList.add('sel-req-active');
   el.style.background='var(--blue2)';
-  el.style.borderColor='var(--blue3)';
+  el.style.borderLeft='3px solid var(--blue3)';
   _screenReqId = reqId;
   document.getElementById('sc-co-inp').value = co;
   document.getElementById('sc-ceo-inp').value = ceo;
