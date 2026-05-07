@@ -1106,12 +1106,16 @@ function renderPfDetailHTML(pfId){
     insp.forEach(function(ins){
       const h = ins.health||0;
       const healthLabel = h ? (h+'점 ('+['','위험','주의','보통','양호','우수'][h]+')') : '-';
-      inspRows += '<div onclick="viewInspectionFromPanel(\''+ins.id+'\')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;border:1px solid var(--bdr);border-radius:10px;margin-bottom:8px;cursor:pointer;background:var(--surf)" onmouseover="this.style.borderColor=\'var(--bdr2)\'" onmouseout="this.style.borderColor=\'var(--bdr)\'">'
+      const isAdmin = CU && CU.role === 'admin';
+      inspRows += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+        +'<div onclick="viewInspectionFromPanel(\''+ins.id+'\')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;border:1px solid var(--bdr);border-radius:10px;flex:1;cursor:pointer;background:var(--surf)" onmouseover="this.style.borderColor=\'var(--bdr2)\'" onmouseout="this.style.borderColor=\'var(--bdr)\'">'
         +'<div style="width:10px;height:10px;border-radius:50%;background:'+hc(h)+';flex-shrink:0"></div>'
         +'<div style="flex:1">'
         +'<div style="font-size:13px;font-weight:600">'+(ins.date)+' · '+(TTYPE[ins.type]||ins.type)+'</div>'
         +'<div style="font-size:12px;color:var(--txt2)">건강도 '+healthLabel+' · 담당: '+(ins.manager||'-')+'</div>'
-        +'</div></div>';
+        +'</div></div>'
+        +(isAdmin ? '<button onclick="deleteInspection(\''+pfId+'\',\''+ins.id+'\')" style="padding:5px 10px;border-radius:6px;border:1px solid var(--red);background:var(--red2);color:var(--red3);font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;white-space:nowrap" title="점검 이력 삭제">✕</button>' : '')
+        +'</div>';
     });
   } else {
     inspRows = '<div style="text-align:center;padding:32px;color:var(--txt3);font-size:13px">아직 점검 이력이 없습니다</div>';
@@ -1139,7 +1143,7 @@ function renderPfDetailHTML(pfId){
     +'<button class="bghost" onclick="renderPfHome()">← 목록</button>'
     +'<div style="font-size:18px;font-weight:800">'+pf.name+'</div>'
     +'<span style="font-size:12px;color:var(--txt2)">'+pf.ceo+' 대표 · '+(pf.sector||'-')+'</span>'
-    +(CU&&CU.role==='admin' ? '<button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="startInspectionFromPanel()">+ 정기점검 입력</button>' : '<button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="startInspectionFromPanel()">+ 정기점검 입력</button>')
+    +(CU&&CU.role==='admin' ? '<div style="margin-left:auto;display:flex;gap:8px"><button class="bghost" onclick="openEditPfModal(\''+pfId+'\')">✎ 정보 수정</button><button class="btn btn-primary btn-sm" onclick="startInspectionFromPanel()">+ 정기점검 입력</button></div>' : '<button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="startInspectionFromPanel()">+ 정기점검 입력</button>')
     +'</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">'
     +'<span style="background:var(--blue2);border:1px solid var(--blue3);color:var(--blue3);padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700">투자 '+pf.investAmt+'백만원</span>'
@@ -2502,8 +2506,28 @@ function renderPreTab(){
 
 function renderAPfTab(){
   const el=document.getElementById('at-pf-body');
-  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><span class="section-title">피투자사 관리</span><button class="btn btn-primary btn-sm" onclick="openAddPfModal()">+ 피투자사 추가</button></div><div class="pf-grid" id="pf-cards-admin"></div>`;
-  renderPfCards('pf-cards-admin');
+  let h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><span class="section-title">피투자사 관리</span><button class="btn btn-primary btn-sm" onclick="openAddPfModal()">+ 피투자사 추가</button></div>';
+  if(!S.pf.length){
+    h+='<div style="text-align:center;padding:48px;color:var(--txt3)">등록된 피투자사가 없습니다</div>';
+  } else {
+    h+='<div class="tbl-wrap"><table><thead><tr><th>기업명</th><th>대표자</th><th>업종</th><th>투자일</th><th>TIPS 기간</th><th>점검</th><th>관리</th></tr></thead><tbody>';
+    S.pf.forEach(function(pf){
+      h+='<tr>'
+        +'<td style="font-weight:700">'+escH(pf.name)+'</td>'
+        +'<td style="color:var(--txt2)">'+escH(pf.ceo||'-')+'</td>'
+        +'<td style="color:var(--txt2);font-size:12px">'+escH(pf.sector||'-')+'</td>'
+        +'<td style="color:var(--txt2)">'+escH(pf.investDate||'-')+'</td>'
+        +'<td style="color:var(--txt2);font-size:12px">'+(pf.tipsStart?pf.tipsStart.slice(0,7):'-')+'~'+(pf.tipsEnd?pf.tipsEnd.slice(0,7):'-')+'</td>'
+        +'<td style="color:var(--txt2)">'+(pf.inspections?pf.inspections.length:0)+'회</td>'
+        +'<td><div style="display:flex;gap:6px">'
+        +'<button class="btn btn-sm" onclick="openEditPfModal(\''+pf.id+'\')">✎ 수정</button>'
+        +'<button class="btn btn-sm btn-danger" onclick="deletePf(\''+pf.id+'\')">삭제</button>'
+        +'</div></td>'
+        +'</tr>';
+    });
+    h+='</tbody></table></div>';
+  }
+  el.innerHTML=h;
 }
 
 function renderAccTab(){
@@ -2565,6 +2589,14 @@ function adminOpen(id){
 }
 function delRv(id){if(!confirm('삭제하시겠습니까?'))return;S.rv=S.rv.filter(r=>r.id!==id);sv();renderAdmin();}
 
+function deletePf(pfId){
+  const pf=S.pf.find(p=>p.id===pfId);
+  if(!pf)return;
+  if(!confirm(pf.name+' 피투자사를 삭제하시겠습니까?\n(정기점검 이력 '+((pf.inspections||[]).length)+'건 포함 모두 삭제됩니다)'))return;
+  S.pf=S.pf.filter(p=>p.id!==pfId);
+  sv();renderAPfTab();
+}
+
 function addAcc(){
   var n = document.getElementById('nu-n').value.trim();
   var e = (document.getElementById('nu-e').value.trim()).toLowerCase();
@@ -2592,6 +2624,65 @@ function delAcc(id){
 }
 
 // ── ADD PORTFOLIO COMPANY ──
+// ── 점검 이력 삭제 ──
+function deleteInspection(pfId, inspId){
+  const pf = S.pf.find(p => p.id === pfId);
+  if(!pf) return;
+  const ins = (pf.inspections||[]).find(x => x.id === inspId);
+  if(!ins) return;
+  if(!confirm(ins.date+' '+ins.manager+' 점검 이력을 삭제하시겠습니까?')) return;
+  pf.inspections = pf.inspections.filter(x => x.id !== inspId);
+  sv();
+  renderPfDetailHTML(pfId);
+  document.getElementById('pf-home').style.display = 'none';
+  document.getElementById('pf-detail-embed').style.display = 'block';
+}
+
+// ── 피투자사 정보 수정 ──
+let _editPfId = null;
+function openEditPfModal(pfId){
+  const pf = S.pf.find(p => p.id === pfId);
+  if(!pf) return;
+  _editPfId = pfId;
+  showM('피투자사 정보 수정',
+    '<div style="display:flex;flex-direction:column;gap:12px">'
+    +'<div class="grid-2"><div><label class="fl">기업명</label><input type="text" id="pf-n" value="'+escH(pf.name||'')+'"/></div><div><label class="fl">대표자</label><input type="text" id="pf-ceo" value="'+escH(pf.ceo||'')+'"/></div></div>'
+    +'<div class="grid-2"><div><label class="fl">업종/분야</label><input type="text" id="pf-sec" value="'+escH(pf.sector||'')+'" placeholder="예: AI / SaaS"/></div><div><label class="fl">사업자번호</label><input type="text" id="pf-biz" value="'+escH(pf.bizNo||'')+'" placeholder="000-00-00000"/></div></div>'
+    +'<div class="grid-2"><div><label class="fl">대표 연락처</label><input type="text" id="pf-phone" value="'+escH(pf.ceoPhone||'')+'" placeholder="010-0000-0000"/></div><div><label class="fl">이메일</label><input type="text" id="pf-email" value="'+escH(pf.email||'')+'" placeholder="ceo@company.com"/></div></div>'
+    +'<div><label class="fl">소재지</label><input type="text" id="pf-addr" value="'+escH(pf.address||'')+'" placeholder="서울시 강남구..."/></div>'
+    +'<div class="grid-2"><div><label class="fl">투자금 (백만원)</label><input type="number" id="pf-inv" value="'+(pf.investAmt||0)+'"/></div><div><label class="fl">투자일</label><input type="date" id="pf-idate" value="'+(pf.investDate||'')+'"/></div></div>'
+    +'<div class="grid-2"><div><label class="fl">TIPS 시작일</label><input type="date" id="pf-ts" value="'+(pf.tipsStart||'')+'"/></div><div><label class="fl">TIPS 종료일</label><input type="date" id="pf-te" value="'+(pf.tipsEnd||'')+'"/></div></div>'
+    +'<div id="pf-err" style="font-size:12px;color:var(--red)"></div>'
+    +'</div>',
+    [{label:'취소',fn:closeM,pr:false},{label:'저장',fn:doEditPf,pr:true}]
+  );
+}
+
+function doEditPf(){
+  const name = document.getElementById('pf-n').value.trim();
+  if(!name){document.getElementById('pf-err').textContent='기업명을 입력하세요.';return;}
+  const pf = S.pf.find(p => p.id === _editPfId);
+  if(!pf) return;
+  pf.name = name;
+  pf.ceo = document.getElementById('pf-ceo').value;
+  pf.sector = document.getElementById('pf-sec').value;
+  pf.bizNo = document.getElementById('pf-biz').value;
+  pf.ceoPhone = document.getElementById('pf-phone').value;
+  pf.email = document.getElementById('pf-email').value;
+  pf.address = document.getElementById('pf-addr').value;
+  pf.investAmt = parseFloat(document.getElementById('pf-inv').value)||0;
+  pf.investDate = document.getElementById('pf-idate').value;
+  pf.tipsStart = document.getElementById('pf-ts').value;
+  pf.tipsEnd = document.getElementById('pf-te').value;
+  sv();
+  closeM();
+  renderPfDetailHTML(_editPfId);
+  document.getElementById('pf-home').style.display = 'none';
+  document.getElementById('pf-detail-embed').style.display = 'block';
+  // 관리자 탭에서 호출된 경우 목록도 새로고침
+  if(document.getElementById('at-pf-body').style.display !== 'none') renderAPfTab();
+}
+
 function openAddPfModal(){
   showM('피투자사 추가',`
     <div style="display:flex;flex-direction:column;gap:12px">
