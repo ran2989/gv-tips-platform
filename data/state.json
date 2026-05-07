@@ -725,7 +725,7 @@
         "memo": "",
         "verdict": "pass"
       },
-      "preCompleted": false,
+      "preCompleted": true,
       "sc": {
         "1": 0,
         "2": 0,
