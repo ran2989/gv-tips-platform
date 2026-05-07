@@ -1868,7 +1868,15 @@ function startInspection(){
   showPg('pg-insp');
 }
 
-function backToPfDetail(){openPfDetail(CUR_PF_ID);}
+function backToPfDetail(){
+  showPg('pg-main');
+  setMainTab('portfolio');
+  if(CUR_PF_ID){
+    renderPfDetailHTML(CUR_PF_ID);
+    document.getElementById('pf-home').style.display='none';
+    document.getElementById('pf-detail-embed').style.display='block';
+  }
+}
 
 // ══ INSPECTION CHECKLIST ══
 const INSP_CHK_DEF=[
@@ -2150,7 +2158,13 @@ function saveInspection(){
   if(!pf.inspections)pf.inspections=[];
   if(INSP_EDIT_ID){const idx=pf.inspections.findIndex(x=>x.id===INSP_EDIT_ID);if(idx>=0){ins.id=INSP_EDIT_ID;pf.inspections[idx]=ins;}INSP_EDIT_ID=null;}
   else{pf.inspections.push(ins);}
-  sv();openPfDetail(CUR_PF_ID);
+  sv();
+  // pg-main으로 이동 후 포트폴리오 상세 패널 표시
+  showPg('pg-main');
+  setMainTab('portfolio');
+  renderPfDetailHTML(CUR_PF_ID);
+  document.getElementById('pf-home').style.display='none';
+  document.getElementById('pf-detail-embed').style.display='block';
 }
 
 // ── VIEW INSPECTION ──
