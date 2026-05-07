@@ -703,7 +703,12 @@
           "e1": "yes",
           "e2": "yes",
           "e3": "yes",
-          "e4": "yes"
+          "e4": "yes",
+          "e5": "yes",
+          "e6": "yes",
+          "e7": "no",
+          "e8": "no",
+          "e9": "no"
         },
         "docs": {},
         "initSc": {},
