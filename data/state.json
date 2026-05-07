@@ -877,6 +877,474 @@
           "unit": ""
         }
       ]
+    },
+    {
+      "id": "sc1778161034973",
+      "type": "screen",
+      "co": "그래비티",
+      "ceo": "모란",
+      "rid": "ran@visioncreator.co.kr",
+      "rname": "Ran Mo",
+      "date": "2026-05-07",
+      "at": "2026-05-07T13:37:14.973Z",
+      "reqId": null,
+      "pre": {
+        "info": {},
+        "elig": {},
+        "docs": {},
+        "initSc": {},
+        "memo": "",
+        "verdict": "pass"
+      },
+      "preCompleted": true,
+      "sc": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 0,
+        "25": 0,
+        "26": 0,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "30": 0,
+        "31": 0,
+        "32": 0,
+        "33": 0,
+        "34": 0,
+        "35": 0,
+        "36": 0,
+        "37": 0,
+        "38": 0,
+        "39": 0,
+        "40": 0,
+        "41": 0,
+        "42": 0,
+        "43": 0,
+        "44": 0
+      },
+      "cm": {},
+      "completed": false,
+      "catsSnapshot": [
+        {
+          "id": "market",
+          "weight": 10,
+          "label": "산업/시장",
+          "color": "#185FA5",
+          "bg": "#E6F1FB",
+          "items": [
+            {
+              "no": 1,
+              "title": "시장이 구조적으로 성장하는가?",
+              "criteria": "기술 변화 기반 구조적 성장 여부",
+              "docs": "IR Deck, 시장조사",
+              "kill": false
+            },
+            {
+              "no": 2,
+              "title": "시장 규모가 투자 가능한 수준인가?",
+              "criteria": "TAM/SAM/SOM 확인 가능",
+              "docs": "IR Deck, 시장규모 산출",
+              "kill": false
+            },
+            {
+              "no": 3,
+              "title": "경쟁 구도가 명확한가?",
+              "criteria": "경쟁사 포지셔닝, 대체재 포함 정의",
+              "docs": "경쟁사 분석표, 시장 맵",
+              "kill": false
+            },
+            {
+              "no": 4,
+              "title": "특정 플레이어가 시장을 장악할 구조인가?",
+              "criteria": "락인 구조 존재 여부",
+              "docs": "BM 구조",
+              "kill": false
+            }
+          ]
+        },
+        {
+          "id": "customer",
+          "weight": 13,
+          "label": "고객",
+          "color": "#0F6E56",
+          "bg": "#E1F5EE",
+          "items": [
+            {
+              "no": 5,
+              "title": "타겟 고객이 명확하게 정의되어 있는가?",
+              "criteria": "산업/직군/규모 기준 구체적 정의",
+              "docs": "IR Deck",
+              "kill": false
+            },
+            {
+              "no": 6,
+              "title": "사용자와 구매 의사결정자가 구분되어 있는가?",
+              "criteria": "실제 사용자 피드백 확인 포함",
+              "docs": "서비스 구조도, 고객 여정",
+              "kill": false
+            },
+            {
+              "no": 7,
+              "title": "고객의 지불의사(WTP)가 검증되어 있는가?",
+              "criteria": "실제 결제/계약 기반 가격 검증",
+              "docs": "계약서, 매출 데이터",
+              "kill": false
+            },
+            {
+              "no": 8,
+              "title": "고객 인터뷰/레퍼런스 확보가 가능한가?",
+              "criteria": "인터뷰, PoC, 레퍼런스 확보 여부",
+              "docs": "고객 인터뷰",
+              "kill": false
+            },
+            {
+              "no": 9,
+              "title": "핵심 고객(Kingpin)이 정의되어 있는가?",
+              "criteria": "매출/레퍼런스 영향력 있는 고객 존재",
+              "docs": "주요 고객 리스트",
+              "kill": false
+            },
+            {
+              "no": 10,
+              "title": "고객 접근 채널이 존재하는가?",
+              "criteria": "CAC 가능한 채널 존재 여부",
+              "docs": "마케팅 데이터",
+              "kill": false
+            }
+          ]
+        },
+        {
+          "id": "pmf",
+          "weight": 17,
+          "label": "PMF",
+          "color": "#534AB7",
+          "bg": "#EEEDFE",
+          "items": [
+            {
+              "no": 11,
+              "title": "반복 사용/구매가 발생하고 있는가?",
+              "criteria": "재구매율, 리텐션 발생 여부 (MAU/DAU)",
+              "docs": "사용 데이터",
+              "kill": true
+            },
+            {
+              "no": 12,
+              "title": "프로모션 없이도 고객 유지/유입되는가?",
+              "criteria": "유입 비중, 바이럴 발생 여부",
+              "docs": "유입 데이터",
+              "kill": false
+            },
+            {
+              "no": 13,
+              "title": "고객의 이탈 사유가 명확히 정의되어 있는가?",
+              "criteria": "원인 정의 및 관리 여부",
+              "docs": "이탈 분석, 설문",
+              "kill": false
+            },
+            {
+              "no": 14,
+              "title": "고객 피드백이 제품 개선에 반영되는가?",
+              "criteria": "제품 개선 루프 존재 여부",
+              "docs": "제품 업데이트 로그",
+              "kill": false
+            },
+            {
+              "no": 15,
+              "title": "핵심 KPI가 정의되고 지속적으로 관리되는가?",
+              "criteria": "핵심 지표 정의 및 트래킹",
+              "docs": "KPI 대시보드",
+              "kill": false
+            }
+          ]
+        },
+        {
+          "id": "product",
+          "weight": 15,
+          "label": "제품/기술",
+          "color": "#854F0B",
+          "bg": "#FAEEDA",
+          "items": [
+            {
+              "no": 16,
+              "title": "기존 솔루션 대비 명확한 차별점이 있는가?",
+              "criteria": "기존 대비 가치 or 명확한 개선",
+              "docs": "제품 소개서",
+              "kill": false
+            },
+            {
+              "no": 17,
+              "title": "기술/제품 로드맵이 존재하는가?",
+              "criteria": "향후 기능/기술 계획 명확성",
+              "docs": "제품/기술 로드맵",
+              "kill": false
+            },
+            {
+              "no": 18,
+              "title": "기술 또는 사업적 해자가 정의되어 있는가?",
+              "criteria": "특허, 데이터, 네트워크 효과 등",
+              "docs": "특허, 기술 설명서",
+              "kill": false
+            },
+            {
+              "no": 19,
+              "title": "핵심 기술이 내부적으로 통제 가능한가?",
+              "criteria": "핵심 기술 내재화(외주 의존 낮음)",
+              "docs": "개발 조직도",
+              "kill": false
+            },
+            {
+              "no": 20,
+              "title": "제품 구조가 확장 가능한가?",
+              "criteria": "기술 기반 타 시장 접목 가능 여부",
+              "docs": "기술 로드맵",
+              "kill": false
+            },
+            {
+              "no": 21,
+              "title": "스케일업 시 병목이 정의되어 있는가?",
+              "criteria": "스케일 시 인력/기술 병목 식별",
+              "docs": "운용 프로세스",
+              "kill": false
+            }
+          ]
+        },
+        {
+          "id": "global",
+          "weight": 1,
+          "label": "글로벌",
+          "color": "#3C3489",
+          "bg": "#EEEDFE",
+          "items": [
+            {
+              "no": 22,
+              "title": "해외 진출 전략이 구체적으로 정의되어 있는가?",
+              "criteria": "국가/진입 방식 구체화",
+              "docs": "글로벌 전략서",
+              "kill": false
+            },
+            {
+              "no": 23,
+              "title": "제품이 글로벌 시장에서도 적용 가능한가?",
+              "criteria": "현지에서도 통하는 제품 구조",
+              "docs": "해외 PoC, 고객 사례",
+              "kill": false
+            },
+            {
+              "no": 24,
+              "title": "글로벌 고객/파트너 전략이 존재하는가?",
+              "criteria": "유통/현지 파트너 확보 여부",
+              "docs": "MOU, 계약서",
+              "kill": false
+            }
+          ]
+        },
+        {
+          "id": "founder",
+          "weight": 18,
+          "label": "창업자",
+          "color": "#993C1D",
+          "bg": "#FAECE7",
+          "items": [
+            {
+              "no": 25,
+              "title": "창업자가 해당 산업에 전문성을 보유하는가?",
+              "criteria": "산업/기술 경험 여부",
+              "docs": "대표 CV, 경력 증빙",
+              "kill": false
+            },
+            {
+              "no": 26,
+              "title": "창업자가 핵심 리스크를 인지하고 있는가?",
+              "criteria": "사업 리스크 정의 수준",
+              "docs": "사업계획서",
+              "kill": false
+            },
+            {
+              "no": 27,
+              "title": "창업자가 명확한 문제 정의를 가지고 있는가?",
+              "criteria": "문제-솔루션 연결 명확성",
+              "docs": "IR Deck",
+              "kill": false
+            },
+            {
+              "no": 28,
+              "title": "투자자와의 커뮤니케이션이 원활한가?",
+              "criteria": "자료 대응 속도/논리성",
+              "docs": "실사 과정 판단",
+              "kill": false
+            },
+            {
+              "no": 29,
+              "title": "윤리성 및 레퓨테이션 이슈가 없는가?",
+              "criteria": "법적 리스크, 평판 문제 여부",
+              "docs": "신용조회, 소송 이력",
+              "kill": true
+            }
+          ]
+        },
+        {
+          "id": "team",
+          "weight": 7,
+          "label": "팀",
+          "color": "#3B6D11",
+          "bg": "#EAF3DE",
+          "items": [
+            {
+              "no": 30,
+              "title": "핵심 팀 구성이 완료되어 있는가?",
+              "criteria": "핵심 인력 확보 여부",
+              "docs": "조직도, 사대보험 명부",
+              "kill": false
+            },
+            {
+              "no": 31,
+              "title": "팀 내 역할 분담이 명확한가?",
+              "criteria": "R&R 명확성",
+              "docs": "조직 역할 문서",
+              "kill": false
+            },
+            {
+              "no": 32,
+              "title": "의사결정 구조가 정의되어 있는가?",
+              "criteria": "대표/이사회 구조 명확성",
+              "docs": "정관, 이사회 자료",
+              "kill": false
+            },
+            {
+              "no": 33,
+              "title": "향후 핵심 인재 채용 계획이 존재하는가?",
+              "criteria": "핵심 인재 유지 전략",
+              "docs": "스톡옵션, 채용 계획",
+              "kill": false
+            }
+          ]
+        },
+        {
+          "id": "finance",
+          "weight": 12,
+          "label": "재무/컴플",
+          "color": "#A32D2D",
+          "bg": "#FCEBEB",
+          "items": [
+            {
+              "no": 34,
+              "title": "재무제표가 신뢰 가능한 수준으로 관리되는가?",
+              "criteria": "재무제표 정확성 (핵심)",
+              "docs": "재무제표, 세무신고서",
+              "kill": true
+            },
+            {
+              "no": 35,
+              "title": "주요 재무 리스크가 식별되어 있는가?",
+              "criteria": "부채, 미수금 등 리스크",
+              "docs": "차입금 내역, 채권",
+              "kill": false
+            },
+            {
+              "no": 36,
+              "title": "현금흐름 구조가 파악 가능한가?",
+              "criteria": "Burn rate, runway 확인",
+              "docs": "자금수지표",
+              "kill": false
+            },
+            {
+              "no": 37,
+              "title": "투자금 사용 이력이 명확하게 관리되는가?",
+              "criteria": "과거 투자금 사용 투명성",
+              "docs": "투자금 집행내역",
+              "kill": false
+            },
+            {
+              "no": 38,
+              "title": "향후 투자금 사용 계획이 구체적인가?",
+              "criteria": "향후 자금 사용 구체성",
+              "docs": "사업계획서",
+              "kill": false
+            },
+            {
+              "no": 39,
+              "title": "지분 및 의결권 구조가 명확한가?",
+              "criteria": "의결권 구조",
+              "docs": "주주명부, 투자계약서",
+              "kill": false
+            }
+          ]
+        },
+        {
+          "id": "risk",
+          "weight": 4,
+          "label": "리스크",
+          "color": "#5F5E5A",
+          "bg": "#F1EFE8",
+          "items": [
+            {
+              "no": 40,
+              "title": "주요 사업 리스크가 정의되어 있는가?",
+              "criteria": "시장/기술/운영 리스크 정의",
+              "docs": "리스크 분석 문서",
+              "kill": false
+            },
+            {
+              "no": 41,
+              "title": "리스크 대응 전략이 존재하는가?",
+              "criteria": "리스크 대응 실행 방안",
+              "docs": "전략 문서",
+              "kill": false
+            }
+          ]
+        },
+        {
+          "id": "exit",
+          "weight": 3,
+          "label": "딜/EXIT",
+          "color": "#993556",
+          "bg": "#FBEAF0",
+          "items": [
+            {
+              "no": 42,
+              "title": "Exit 시나리오가 구체적으로 정의되어 있는가?",
+              "criteria": "IPO/M&A 경로 구체성",
+              "docs": "Exit 전략 자료",
+              "kill": false
+            },
+            {
+              "no": 43,
+              "title": "Exit 달성을 위한 재무 목표가 설정되어 있는가?",
+              "criteria": "Exit 기준 매출/이익 설정",
+              "docs": "재무 계획",
+              "kill": false
+            },
+            {
+              "no": 44,
+              "title": "목표 달성을 위한 실행 계획이 존재하는가?",
+              "criteria": "목표 달성 로드맵",
+              "docs": "사업 계획서",
+              "kill": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "pf": [
