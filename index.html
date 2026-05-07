@@ -1445,15 +1445,42 @@ function showScreenResult(){
     +'</div>';
 }
 function buildPreFormHTML(r){
-  return '<div id="elig-list"></div>'
-    +'<div style="margin-top:16px;padding:10px 0 6px;border-top:1px solid var(--bdr);font-size:10px;font-weight:700;color:var(--blue3);text-transform:uppercase;letter-spacing:.6px">재무 요건</div>'
-    +'<div id="fs-drop-zone" ondragover="event.preventDefault();this.style.borderColor=\'var(--blue3)\'" ondragleave="this.style.borderColor=\'var(--bdr)\'" ondrop="handleFsDrop(event)" style="border:2px dashed var(--bdr);border-radius:10px;padding:14px 20px;text-align:center;cursor:pointer;margin-bottom:12px;transition:.15s" onclick="document.getElementById(\'fs-file-inp\').click()">'
-    +'<div style="font-size:13px;color:var(--txt2);margin-bottom:3px">📄 재무제표 파일을 드래그하거나 클릭하여 업로드</div>'
+  return ''
+    // ① 자격요건
+    +'<div class="card" style="margin-bottom:14px">'
+    +'<div class="section-head"><div style="display:flex;align-items:center;gap:10px">'
+    +'<div style="width:28px;height:28px;border-radius:7px;background:var(--blue2);color:var(--blue);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">①</div>'
+    +'<span class="section-title">TIPS 자격요건 체크</span></div>'
+    +'<span style="font-size:11px;color:var(--txt3)">Pass → 사전심사 / Fail → Drop</span></div>'
+    +'<div id="elig-list"></div></div>'
+    // ② 재무요건
+    +'<div class="card" style="margin-bottom:14px">'
+    +'<div class="section-head"><div style="display:flex;align-items:center;gap:10px">'
+    +'<div style="width:28px;height:28px;border-radius:7px;background:var(--blue2);color:var(--blue);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">②</div>'
+    +'<span class="section-title">재무 요건</span></div></div>'
+    +'<div id="fs-drop-zone" ondragover="event.preventDefault();this.style.borderColor=\'var(--blue3)\'" ondragleave="this.style.borderColor=\'var(--bdr)\'" ondrop="handleFsDrop(event)" style="border:2px dashed var(--bdr);border-radius:10px;padding:12px 16px;text-align:center;cursor:pointer;margin-bottom:12px;transition:.15s" onclick="document.getElementById(\'fs-file-inp\').click()">'
+    +'<div style="font-size:13px;color:var(--txt2);margin-bottom:2px">📄 재무제표 파일 드래그 또는 클릭하여 업로드</div>'
     +'<div style="font-size:11px;color:var(--txt3)">PDF에서 매출·영업이익·당기순이익·부채비율 자동 추출</div>'
-    +'<input type="file" id="fs-file-inp" accept=".pdf,.txt" style="display:none" onchange="handleFsFile(this.files[0])"/>'
-    +'</div>'
-    +'<div id="fs-parse-result" style="display:none;background:var(--green2);border:1px solid var(--green);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green3);margin-bottom:12px"></div>'
-    +'<div id="docs-list"></div>';
+    +'<input type="file" id="fs-file-inp" accept=".pdf,.txt" style="display:none" onchange="handleFsFile(this.files[0])"/></div>'
+    +'<div id="fs-parse-result" style="display:none;border-radius:8px;padding:10px 14px;font-size:12px;margin-bottom:12px"></div>'
+    +'<div id="docs-list"></div></div>'
+    // ③ 종합 의견 & 판정결과
+    +'<div class="card" style="margin-bottom:20px">'
+    +'<div class="section-head"><div style="display:flex;align-items:center;gap:10px">'
+    +'<div style="width:28px;height:28px;border-radius:7px;background:var(--blue2);color:var(--blue);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">③</div>'
+    +'<span class="section-title">종합 의견 및 검토 결과</span></div></div>'
+    +'<div style="margin-bottom:14px"><label class="fl">사업 요약 및 종합 의견</label>'
+    +'<textarea id="p-memo" rows="3" placeholder="기업의 핵심 강점, 차별점, 주요 리스크 등을 기술해주세요..."></textarea></div>'
+    +'<div><label class="fl">검토 결과</label>'
+    +'<div class="pre-verdict">'
+    +'<div class="pvopt pv-pass" id="pv-pass" onclick="setPV(\'pass\')">✓ Pass → 사전심사 진행</div>'
+    +'<div class="pvopt pv-hold" id="pv-hold" onclick="setPV(\'hold\')">⏸ 보류 → 2주 내 보완</div>'
+    +'<div class="pvopt pv-drop" id="pv-drop" onclick="setPV(\'drop\')">✗ Fail → Drop (사유 기재)</div>'
+    +'</div></div>'
+    +'<div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end">'
+    +'<button class="btn" onclick="saveReqForm(false)">임시 저장</button>'
+    +'<button class="btn btn-green" id="btn-to-step2" onclick="saveReqForm(true)">저장 완료</button>'
+    +'</div></div>';
 }
 
 function loadPreFormValues(r){
@@ -2304,6 +2331,25 @@ function savePre(goNext){
   r.pre.memo=document.getElementById('p-memo').value;
   if(goNext&&r.pre.verdict==='pass'){r.preCompleted=true;sv();CCIDX=0;enterRv();}
   else{if(r.pre.verdict&&r.pre.verdict!=='pass')r.preCompleted=true;sv();alert(goNext?'결과를 "통과"로 선택해야 Step 2로 진행할 수 있습니다.':'임시 저장되었습니다.');}
+}
+
+// 패널 내 요건검토 저장 (req-form-body 내 p-memo, pv-pass 등 사용)
+function saveReqForm(markComplete){
+  const r=getR();if(!r)return;
+  const memoEl=document.getElementById('p-memo');
+  if(memoEl) r.pre.memo=memoEl.value;
+  if(markComplete){
+    if(!r.pre.verdict){alert('검토 결과(Pass/보류/Fail)를 선택해주세요.');return;}
+    r.preCompleted=true;
+  }
+  sv();
+  const msg = markComplete ? '저장 완료되었습니다.' : '임시 저장되었습니다.';
+  // 간단한 저장 피드백
+  const btn=document.getElementById('btn-to-step2');
+  if(btn){const orig=btn.textContent;btn.textContent='✓ 저장됨';btn.disabled=true;setTimeout(function(){btn.textContent=orig;btn.disabled=false;},1500);}
+  else{alert(msg);}
+  // 목록 새로고침
+  renderReqList();
 }
 
 // ══════════════════════════ STEP 2: REVIEW ══════════════════════════
