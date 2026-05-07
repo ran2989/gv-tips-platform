@@ -1290,29 +1290,18 @@ function renderScreenList(){
       ? '<span class="'+cls+'">'+( verdict==='go'?'Go':verdict==='hold'?'Hold':'Drop')+'</span>'
       : '<span class="bw">'+pct+'% 진행</span>';
     const scoreInfo = r.completed ? ' · 가중점수 '+cvrR.weightedScore+'점' : '';
+    const stepBadge = r.reqId
+      ? '<span style="font-size:10px;background:var(--green2);border:1px solid var(--green3);color:var(--green3);padding:2px 6px;border-radius:4px;font-weight:700;margin-left:6px">Step2</span>'
+      : '';
     return '<div onclick="openScreenReview(\'' + r.id + '\')" style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--bdr);cursor:pointer">'
-      +'<div style="flex:1"><div style="font-weight:700">'+r.co+'</div>'
+      +'<div style="flex:1"><div style="font-weight:700;display:flex;align-items:center">'+escH(r.co)+stepBadge+'</div>'
       +'<div style="font-size:11px;color:var(--txt2);margin-top:2px">'+r.rname+' · '+r.date+scoreInfo+'</div></div>'
       +stEl+'</div>';
   }).join('');
 }
 
-function startNewScreen(){
-  const co = prompt('심사 대상 기업명을 입력하세요:');
-  if(!co || !co.trim()) return;
-  const ceo = prompt('대표자명 (선택사항):') || '';
-  const r = {
-    id: 'sc' + Date.now(), type: 'screen',
-    co: co.trim(), ceo: ceo.trim(), rid: CU.id, rname: CU.name,
-    date: new Date().toISOString().slice(0,10), at: new Date().toISOString(),
-    pre:{info:{},elig:{},docs:{},initSc:{},memo:'',verdict:'pass'}, preCompleted:true,
-    sc:{}, cm:{}, completed:false
-  };
-  AITEMS.forEach(i => r.sc[i.no] = 0);
-  S.rv.push(r); sv();
-  CRID = r.id; CCIDX = 0;
-  enterScreenInput(r);
-}
+// startNewScreen은 파일 하단에 정의된 버전이 사용됨 (function hoisting 최종 선언 우선)
+function startNewScreen(){ /* overridden below */ }
 
 function openScreenReview(id){
   CRID = id;
@@ -2640,22 +2629,74 @@ function deleteInspection(pfId, inspId){
 
 // ── 피투자사 정보 수정 ──
 let _editPfId = null;
+let _editContacts = [];
+
+function renderEditContacts(){
+  const el = document.getElementById('pf-contacts-list');
+  if(!el) return;
+  if(!_editContacts.length){
+    el.innerHTML='<div style="text-align:center;padding:10px;color:var(--txt3);font-size:12px">등록된 주주/연락처가 없습니다</div>';
+    return;
+  }
+  let h='';
+  _editContacts.forEach(function(c,i){
+    h+='<div style="display:grid;grid-template-columns:1fr 0.7fr 0.6fr 1fr 1fr 0.5fr auto;gap:5px;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr)">'
+      +'<input value="'+escH(c.name||'')+'" placeholder="이름" oninput="_editContacts['+i+'].name=this.value" style="padding:4px 7px;border:1px solid var(--bdr);border-radius:4px;background:var(--surf2);color:var(--txt);font-size:12px"/>'
+      +'<input value="'+escH(c.role||'')+'" placeholder="대표/주주" oninput="_editContacts['+i+'].role=this.value" style="padding:4px 7px;border:1px solid var(--bdr);border-radius:4px;background:var(--surf2);color:var(--txt);font-size:12px"/>'
+      +'<input value="'+escH(c.share||'')+'" placeholder="지분%" oninput="_editContacts['+i+'].share=this.value" style="padding:4px 7px;border:1px solid var(--bdr);border-radius:4px;background:var(--surf2);color:var(--txt);font-size:12px;text-align:center"/>'
+      +'<input value="'+escH(c.phone||'')+'" placeholder="전화번호" oninput="_editContacts['+i+'].phone=this.value" style="padding:4px 7px;border:1px solid var(--bdr);border-radius:4px;background:var(--surf2);color:var(--txt);font-size:12px"/>'
+      +'<input value="'+escH(c.email||'')+'" placeholder="이메일" oninput="_editContacts['+i+'].email=this.value" style="padding:4px 7px;border:1px solid var(--bdr);border-radius:4px;background:var(--surf2);color:var(--txt);font-size:12px"/>'
+      +'<input value="'+escH(c.note||'')+'" placeholder="비고" oninput="_editContacts['+i+'].note=this.value" style="padding:4px 7px;border:1px solid var(--bdr);border-radius:4px;background:var(--surf2);color:var(--txt);font-size:12px"/>'
+      +'<button onclick="_editContacts.splice('+i+',1);renderEditContacts()" style="padding:4px 8px;border-radius:4px;border:1px solid var(--red);background:var(--red2);color:var(--red3);cursor:pointer;font-size:11px">✕</button>'
+      +'</div>';
+  });
+  el.innerHTML=h;
+}
+
 function openEditPfModal(pfId){
   const pf = S.pf.find(p => p.id === pfId);
   if(!pf) return;
   _editPfId = pfId;
-  showM('피투자사 정보 수정',
-    '<div style="display:flex;flex-direction:column;gap:12px">'
+  _editContacts = JSON.parse(JSON.stringify(pf.contacts||[]));
+  // share 필드가 없으면 note에서 파싱 시도
+  _editContacts.forEach(function(c){
+    if(!c.share && c.note){
+      var m = c.note.match(/([0-9.]+)%/);
+      if(m) c.share = m[1];
+    }
+  });
+
+  const body = '<div style="display:flex;flex-direction:column;gap:12px">'
     +'<div class="grid-2"><div><label class="fl">기업명</label><input type="text" id="pf-n" value="'+escH(pf.name||'')+'"/></div><div><label class="fl">대표자</label><input type="text" id="pf-ceo" value="'+escH(pf.ceo||'')+'"/></div></div>'
     +'<div class="grid-2"><div><label class="fl">업종/분야</label><input type="text" id="pf-sec" value="'+escH(pf.sector||'')+'" placeholder="예: AI / SaaS"/></div><div><label class="fl">사업자번호</label><input type="text" id="pf-biz" value="'+escH(pf.bizNo||'')+'" placeholder="000-00-00000"/></div></div>'
     +'<div class="grid-2"><div><label class="fl">대표 연락처</label><input type="text" id="pf-phone" value="'+escH(pf.ceoPhone||'')+'" placeholder="010-0000-0000"/></div><div><label class="fl">이메일</label><input type="text" id="pf-email" value="'+escH(pf.email||'')+'" placeholder="ceo@company.com"/></div></div>'
     +'<div><label class="fl">소재지</label><input type="text" id="pf-addr" value="'+escH(pf.address||'')+'" placeholder="서울시 강남구..."/></div>'
     +'<div class="grid-2"><div><label class="fl">투자금 (백만원)</label><input type="number" id="pf-inv" value="'+(pf.investAmt||0)+'"/></div><div><label class="fl">투자일</label><input type="date" id="pf-idate" value="'+(pf.investDate||'')+'"/></div></div>'
     +'<div class="grid-2"><div><label class="fl">TIPS 시작일</label><input type="date" id="pf-ts" value="'+(pf.tipsStart||'')+'"/></div><div><label class="fl">TIPS 종료일</label><input type="date" id="pf-te" value="'+(pf.tipsEnd||'')+'"/></div></div>'
+    +'<div style="border-top:1px solid var(--bdr);padding-top:12px">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+    +'<label class="fl" style="margin:0;color:var(--blue3)">주주명부 / 연락처</label>'
+    +'<button onclick="_editContacts.push({name:\'\',role:\'\',share:\'\',phone:\'\',email:\'\',note:\'\'});renderEditContacts()" style="padding:4px 10px;border-radius:5px;border:1px solid var(--bdr2);background:var(--surf3);color:var(--txt2);cursor:pointer;font-size:11px;font-weight:600">+ 추가</button>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 0.7fr 0.6fr 1fr 1fr 0.5fr auto;gap:5px;margin-bottom:4px">'
+    +'<span style="font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;padding:0 2px">이름</span>'
+    +'<span style="font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;padding:0 2px">역할</span>'
+    +'<span style="font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;padding:0 2px">지분%</span>'
+    +'<span style="font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;padding:0 2px">전화</span>'
+    +'<span style="font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;padding:0 2px">이메일</span>'
+    +'<span style="font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;padding:0 2px">비고</span>'
+    +'<span></span>'
+    +'</div>'
+    +'<div id="pf-contacts-list"></div>'
+    +'</div>'
     +'<div id="pf-err" style="font-size:12px;color:var(--red)"></div>'
-    +'</div>',
+    +'</div>';
+
+  showM('피투자사 정보 수정', body,
     [{label:'취소',fn:closeM,pr:false},{label:'저장',fn:doEditPf,pr:true}]
   );
+  // 모달 렌더 후 주주 목록 렌더링
+  setTimeout(renderEditContacts, 50);
 }
 
 function doEditPf(){
@@ -2674,12 +2715,16 @@ function doEditPf(){
   pf.investDate = document.getElementById('pf-idate').value;
   pf.tipsStart = document.getElementById('pf-ts').value;
   pf.tipsEnd = document.getElementById('pf-te').value;
+  // 주주명부/연락처 저장 (share → note 업데이트)
+  _editContacts.forEach(function(c){
+    if(c.share && !c.note) c.note = c.share+'%';
+  });
+  pf.contacts = _editContacts.filter(function(c){return c.name.trim();});
   sv();
   closeM();
   renderPfDetailHTML(_editPfId);
   document.getElementById('pf-home').style.display = 'none';
   document.getElementById('pf-detail-embed').style.display = 'block';
-  // 관리자 탭에서 호출된 경우 목록도 새로고침
   if(document.getElementById('at-pf-body').style.display !== 'none') renderAPfTab();
 }
 
@@ -3632,23 +3677,84 @@ function startNewReq(){
   S.rv.push(r);sv();openReqReview(r.id);
 }
 
-const _origStartNewScreen=startNewScreen;
+let _screenReqId = null; // 연결된 요건검토 ID
+
 function startNewScreen(){
-  const co=prompt('심사 대상 기업명을 입력하세요:');
-  if(!co||!co.trim())return;
-  const ceo=prompt('대표자명 (선택사항):')||'';
+  _screenReqId = null;
+
+  // 요건검토 통과 기업 목록 (pass 판정, 아직 사전심사 없는 것 우선)
+  const existingScreenCos = new Set(S.rv.filter(function(x){return x.type==='screen';}).map(function(x){return x.co;}));
+  const passedReqs = S.rv.filter(function(r){
+    return r.type==='req' && r.preCompleted && r.pre && r.pre.verdict==='pass';
+  }).sort(function(a,b){return b.at.localeCompare(a.at);});
+
+  let reqListHtml = '';
+  if(passedReqs.length){
+    reqListHtml = '<div style="margin-bottom:14px">'
+      +'<div style="font-size:11px;font-weight:700;color:var(--green3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">✓ 요건검토 통과 기업 선택 (Step 1 → Step 2)</div>'
+      +'<div style="max-height:220px;overflow-y:auto;border:1px solid var(--bdr);border-radius:8px">';
+    passedReqs.forEach(function(r){
+      var already = existingScreenCos.has(r.co);
+      reqListHtml += '<div id="req-sel-'+r.id+'" onclick="selectReqForScreen(\''+r.id+'\',\''+escH(r.co)+'\',\''+escH(r.ceo||'')+'\',this)"'
+        +' style="display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--bdr);transition:.1s;'+(already?'opacity:.5':'')+'";'
+        +' onmouseover="if(!this.classList.contains(\'selected-req\'))this.style.background=\'var(--surf3)\'"'
+        +' onmouseout="if(!this.classList.contains(\'selected-req\'))this.style.background=\'\'">'
+        +'<div style="flex:1">'
+        +'<div style="font-size:13px;font-weight:700">'+escH(r.co)+(already?' <span style="font-size:10px;color:var(--amber3)">(사전심사 진행 중)</span>':'')+'</div>'
+        +'<div style="font-size:11px;color:var(--txt2)">'+escH(r.ceo||'대표 미기재')+' · '+r.date+'</div>'
+        +'</div>'
+        +'<span class="bp" style="font-size:10px;flex-shrink:0">Pass</span>'
+        +'</div>';
+    });
+    reqListHtml += '</div></div>';
+  }
+
+  const body = reqListHtml
+    +'<div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">'
+    +(passedReqs.length ? '또는 새 기업 직접 입력' : '기업 정보 입력')+'</div>'
+    +'<div style="display:flex;flex-direction:column;gap:10px">'
+    +'<div><label class="fl">기업명 *</label><input type="text" id="sc-co-inp" placeholder="(주)스타트업"/></div>'
+    +'<div><label class="fl">대표자명</label><input type="text" id="sc-ceo-inp" placeholder="홍길동"/></div>'
+    +'</div>';
+
+  showM('사전심사 시작', body,
+    [{label:'취소', fn:closeM, pr:false},
+     {label:'심사 시작 →', fn:doStartNewScreen, pr:true}]
+  );
+}
+
+function selectReqForScreen(reqId, co, ceo, el){
+  // 이전 선택 해제
+  document.querySelectorAll('[id^="req-sel-"]').forEach(function(e){
+    e.classList.remove('selected-req');
+    e.style.background='';
+  });
+  el.classList.add('selected-req');
+  el.style.background='var(--blue2)';
+  el.style.borderColor='var(--blue3)';
+  _screenReqId = reqId;
+  document.getElementById('sc-co-inp').value = co;
+  document.getElementById('sc-ceo-inp').value = ceo;
+}
+
+function doStartNewScreen(){
+  const co = (document.getElementById('sc-co-inp').value||'').trim();
+  if(!co){alert('기업명을 입력하세요.');return;}
+  const ceo = (document.getElementById('sc-ceo-inp').value||'').trim();
+  closeM();
   const effectiveCats=getEffectiveCats(null);
   const effectiveItems=effectiveCats.flatMap(function(c){return c.items;});
-  const r={id:'sc'+Date.now(),type:'screen',co:co.trim(),ceo:ceo.trim(),rid:CU.id,rname:CU.name,
+  const r={id:'sc'+Date.now(),type:'screen',co:co,ceo:ceo,rid:CU.id,rname:CU.name,
     date:new Date().toISOString().slice(0,10),at:new Date().toISOString(),
+    reqId: _screenReqId||null,
     pre:{info:{},elig:{},docs:{},initSc:{},memo:'',verdict:'pass'},preCompleted:true,
     sc:{},cm:{},completed:false,
     catsSnapshot:JSON.parse(JSON.stringify(effectiveCats))
   };
+  _screenReqId = null;
   effectiveItems.forEach(function(i){r.sc[i.no]=0;});
   S.rv.push(r);sv();
   CRID=r.id;CCIDX=0;
-  // Apply snapshot cats to runtime (only if different from CATS to avoid self-clear bug)
   if(effectiveCats !== CATS){
     CATS.splice(0,CATS.length);effectiveCats.forEach(function(c){CATS.push(c);});
     AITEMS.splice(0,AITEMS.length);effectiveItems.forEach(function(i){AITEMS.push(i);});
