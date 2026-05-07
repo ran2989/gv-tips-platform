@@ -405,9 +405,13 @@ tr:last-child td{border-bottom:none}
       <div class="card"><div class="section-head"><span class="section-title">요건검토 목록</span><span id="req-cnt" style="font-size:12px;color:var(--txt2)"></span></div><div id="req-list"></div></div>
     </div>
     <div id="req-form-view" style="display:none">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
         <button class="bghost" onclick="backToReqList()">← 목록</button>
-        <div style="font-size:16px;font-weight:700" id="req-form-title">새 1차 요건검토</div>
+        <div style="font-size:16px;font-weight:700" id="req-form-title">새 신규 TIPS 요건검토</div>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn btn-sm" onclick="saveReqForm(false)">임시 저장</button>
+          <button class="btn btn-primary btn-sm" onclick="saveReqForm(true)">✓ 저장 완료</button>
+        </div>
       </div>
       <div id="req-form-body"></div>
     </div>
