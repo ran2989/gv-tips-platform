@@ -1121,7 +1121,7 @@
         "memo": "포스텍 원천 특허를 보유한 딥테크 기업 (SCI 논문 6편, 특허 11건), 경북 포항 소재\n시제품 생산 및 임상 테스트 완료 ㅡ> 시장성 검증이 필요 ",
         "verdict": "hold"
       },
-      "preCompleted": false,
+      "preCompleted": true,
       "sc": {
         "1": 0,
         "2": 0,
