@@ -1592,5 +1592,11 @@
     "sheetInsp": "정기점검",
     "autoSync": true
   },
-  "gsLog": []
+  "gsLog": [
+    {
+      "ok": true,
+      "msg": "연결 테스트: _test 1행 전송 완료",
+      "at": "2026-05-08 03:58"
+    }
+  ]
 }
