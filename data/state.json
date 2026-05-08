@@ -1344,10 +1344,10 @@
         },
         "docs": {},
         "initSc": {},
-        "memo": "",
+        "memo": "*추가 확인 필요서류 - 사업자등록증, 재무제표, 국세/지방세 완납증명서, 주주명부, 창업자 이력서, NTIS 유사도 체크",
         "verdict": "hold"
       },
-      "preCompleted": false,
+      "preCompleted": true,
       "sc": {
         "1": 0,
         "2": 0,
