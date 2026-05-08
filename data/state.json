@@ -1585,6 +1585,12 @@
     }
   ],
   "weightCfg": null,
-  "gsCfg": null,
+  "gsCfg": {
+    "url": "https://script.google.com/a/macros/visioncreator.co.kr/s/AKfycbz0xwspbcOIwCUa7JzXh_QeUJzKXxaCtSZBQTnEmJZUWOByhHoaOm_4a8pUqwLdly8-Sg/exec",
+    "sheetRv": "심사결과",
+    "sheetPre": "사전검토",
+    "sheetInsp": "정기점검",
+    "autoSync": true
+  },
   "gsLog": []
 }
