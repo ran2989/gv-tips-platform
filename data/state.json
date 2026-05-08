@@ -713,7 +713,8 @@
         "info": {},
         "elig": {
           "e1": "yes",
-          "e2": "yes"
+          "e2": "yes",
+          "e3": "yes"
         },
         "docs": {},
         "initSc": {},
