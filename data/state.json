@@ -1380,7 +1380,8 @@
         "elig": {
           "e11": "yes",
           "e1": "yes",
-          "e2": "yes"
+          "e2": "yes",
+          "e10": "yes"
         },
         "docs": {},
         "initSc": {},
