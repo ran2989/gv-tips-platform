@@ -1307,7 +1307,8 @@
         "info": {},
         "elig": {
           "e1": "yes",
-          "e2": "yes"
+          "e2": "yes",
+          "e9": "no"
         },
         "docs": {},
         "initSc": {},
