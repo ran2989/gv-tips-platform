@@ -379,6 +379,7 @@ tr:last-child td{border-bottom:none}
     <div class="mnitem" id="mn-screen" onclick="setMainTab('screen')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>사전심사</div>
   </div>
   <div class="mnright">
+    <span id="save-indicator" style="display:none;font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;background:var(--surf3)"></span>
     <span id="mn-username" style="font-size:12px;color:var(--txt2)"></span>
     <button class="bghost" id="mn-admin-btn" onclick="goAdmin()" style="display:none;font-size:11px">⚙ 관리</button>
     <button class="bghost" onclick="doLogout()">로그아웃</button>
@@ -979,40 +980,63 @@ async function loadFromGh(){
 
 let _saveTimer = null;
 function sv(){
-  // Save to localStorage immediately (works offline)
-  try { localStorage.setItem('gv_state_cache', JSON.stringify(S)); } catch{}
-  // Debounce GitHub save (background, non-blocking)
+  // 타임스탬프 갱신 후 localStorage 즉시 저장 (오프라인·빠른 이동에도 유지)
+  S._savedAt = Date.now();
+  try { localStorage.setItem('gv_state_cache', JSON.stringify(S)); } catch(e){}
+  // 저장 인디케이터 표시
+  _showSaveIndicator('saving');
+  // GitHub push 디바운스 (300ms)
   clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(async () => {
-    const cfg = getGhCfg();
-    if(!cfg || !cfg.owner) return;
-    const base = cfg.apiBase || 'https://api.github.com';
-    const hdrs = {'Content-Type':'application/json','Accept':'application/vnd.github+json'};
-    if(cfg.pat) hdrs['Authorization'] = 'Bearer '+cfg.pat;
-    try {
-      const sha = localStorage.getItem('gv_state_sha') || null;
-      const jsonStr = JSON.stringify(S, null, 2);
-      const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
-      const body = { message: 'Update state '+new Date().toISOString(), content: b64 };
-      if(sha) body.sha = sha;
-      const res = await fetch(
-        base+'/repos/'+cfg.owner+'/'+cfg.repo+'/contents/data/state.json',
-        { method:'PUT', headers: hdrs, body: JSON.stringify(body) }
-      );
-      if(res.status === 409){
-        // SHA conflict — reload latest and merge
-        console.warn('GitHub SHA conflict, reloading...');
-        const reloaded = await loadFromGh();
-        if(reloaded){ S = reloaded; applyWeights(); }
-        return;
-      }
-      if(!res.ok){ const e = await res.json().catch(()=>({})); throw new Error('GitHub PUT '+res.status+': '+(e.message||'')); }
-      const result = await res.json();
-      if(result.content && result.content.sha) localStorage.setItem('gv_state_sha', result.content.sha);
-    } catch(e) {
-      console.error('GitHub save error:', e);
+  _saveTimer = setTimeout(function(){ _pushToGitHub(0); }, 300);
+}
+
+async function _pushToGitHub(retryCount){
+  if(retryCount > 4){ console.error('GitHub save: max retries exceeded'); _showSaveIndicator('error'); return; }
+  const cfg = getGhCfg();
+  if(!cfg || !cfg.owner) return;
+  const base = cfg.apiBase || 'https://api.github.com';
+  const hdrs = {'Content-Type':'application/json','Accept':'application/vnd.github+json'};
+  if(cfg.pat) hdrs['Authorization'] = 'Bearer '+cfg.pat;
+  try {
+    const sha = localStorage.getItem('gv_state_sha') || null;
+    const jsonStr = JSON.stringify(S, null, 2);
+    const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+    const body = { message: 'Update state '+new Date().toISOString(), content: b64 };
+    if(sha) body.sha = sha;
+    const res = await fetch(
+      base+'/repos/'+cfg.owner+'/'+cfg.repo+'/contents/data/state.json',
+      { method:'PUT', headers: hdrs, body: JSON.stringify(body) }
+    );
+    if(res.status === 409){
+      // SHA 충돌 — S를 덮어쓰지 않고 최신 SHA만 가져와서 재시도
+      console.warn('GitHub SHA conflict, fetching new SHA...');
+      try {
+        const infoRes = await fetch(
+          base+'/repos/'+cfg.owner+'/'+cfg.repo+'/contents/data/state.json',
+          { headers: hdrs }
+        );
+        if(infoRes.ok){ const info = await infoRes.json(); localStorage.setItem('gv_state_sha', info.sha); }
+      } catch(e2){}
+      setTimeout(function(){ _pushToGitHub(retryCount+1); }, 500);
+      return;
     }
-  }, 800);
+    if(!res.ok){ throw new Error('GitHub PUT '+res.status); }
+    const result = await res.json();
+    if(result.content && result.content.sha) localStorage.setItem('gv_state_sha', result.content.sha);
+    _showSaveIndicator('saved');
+  } catch(e) {
+    console.error('GitHub save error:', e);
+    _showSaveIndicator('error');
+  }
+}
+
+function _showSaveIndicator(state){
+  // 저장 상태 표시 (우상단)
+  var el = document.getElementById('save-indicator');
+  if(!el) return;
+  if(state==='saving'){ el.textContent='저장 중...'; el.style.color='var(--txt3)'; el.style.display='block'; }
+  else if(state==='saved'){ el.textContent='✓ 저장됨'; el.style.color='var(--green3)'; el.style.display='block'; setTimeout(function(){ el.style.display='none'; }, 2000); }
+  else if(state==='error'){ el.textContent='⚠ 저장 오류 (로컬에는 보존됨)'; el.style.color='var(--amber3)'; el.style.display='block'; }
 }
 
 // JWT decode helper for Google ID token
@@ -1221,8 +1245,8 @@ function backToPfDetail(){
 
 // ── 1차 요건검토 ──
 function renderReqList(){
-  const myReqs = S.rv.filter(r => r.rid === CU.id && r.type === 'req')
-    .concat(CU.role === 'admin' ? S.rv.filter(r => r.type === 'req' && r.rid !== CU.id) : [])
+  // 모든 팀원이 전체 요건검토 목록 열람 가능
+  const myReqs = S.rv.filter(r => r.type === 'req' || (r.id && r.id.startsWith('rq')))
     .sort((a,b) => b.at.localeCompare(a.at));
   document.getElementById('req-cnt').textContent = myReqs.length + '건';
   const el = document.getElementById('req-list');
@@ -1282,10 +1306,9 @@ function backToReqList(){
 
 // ── 사전심사 ──
 function renderScreenList(){
-  const myRvs = (CU.role === 'admin'
-    ? S.rv.filter(r => !r.type || r.type === 'screen')
-    : S.rv.filter(r => r.rid === CU.id && (!r.type || r.type === 'screen'))
-  ).sort((a,b) => b.at.localeCompare(a.at));
+  // 모든 팀원이 전체 사전심사 목록 열람 가능
+  const myRvs = S.rv.filter(r => !r.type || r.type === 'screen')
+    .sort((a,b) => b.at.localeCompare(a.at));
 
   document.getElementById('screen-cnt').textContent = myRvs.length + '건';
   const el = document.getElementById('screen-list');
@@ -1481,10 +1504,7 @@ function buildPreFormHTML(r){
     +'<div class="pvopt pv-hold" id="pv-hold" onclick="setPV(\'hold\')">⏸ 보류 → 2주 내 보완</div>'
     +'<div class="pvopt pv-drop" id="pv-drop" onclick="setPV(\'drop\')">✗ Fail → Drop (사유 기재)</div>'
     +'</div></div>'
-    +'<div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end">'
-    +'<button class="btn" onclick="saveReqForm(false)">임시 저장</button>'
-    +'<button class="btn btn-green" id="btn-to-step2" onclick="saveReqForm(true)">저장 완료</button>'
-    +'</div></div>';
+    +'</div>';
 }
 
 function loadPreFormValues(r){
@@ -1593,21 +1613,48 @@ async function startup(){
   const cfg = getGhCfg();
   const gisId = localStorage.getItem('gv_gis_client_id') || APP_CONFIG.gisClientId || '';
   if(cfg && cfg.owner && cfg.repo && (cfg.pat || cfg.apiBase) && gisId){
-    // Show login immediately; load data in background
     showPg('pg-login');
     initGIS(gisId);
-    try {
-      const loaded = await loadFromGh();
-      if(loaded){
-        S = loaded;
+
+    // 1단계: localStorage 캐시로 즉시 복원 (가장 빠르고 안전)
+    var cachedStr = localStorage.getItem('gv_state_cache');
+    if(cachedStr){
+      try {
+        var cached = JSON.parse(cachedStr);
+        S = cached;
         if(!S.acc) S.acc = [];
         if(!S.rv)  S.rv  = [];
         if(!S.pf)  S.pf  = [];
-        seedDefaults();
         applyWeights();
+      } catch(e){ console.warn('Cache parse error', e); }
+    }
+
+    // 2단계: GitHub에서 동기화 — 단, GitHub가 로컬보다 오래됐으면 무시
+    try {
+      var loaded = await loadFromGh();
+      if(loaded){
+        var localTs = S._savedAt || 0;
+        var remoteTs = loaded._savedAt || 0;
+        if(remoteTs >= localTs){
+          // GitHub가 더 최신이거나 동일 → GitHub 데이터 사용
+          S = loaded;
+          if(!S.acc) S.acc = [];
+          if(!S.rv)  S.rv  = [];
+          if(!S.pf)  S.pf  = [];
+          seedDefaults();
+          applyWeights();
+        } else {
+          // 로컬이 더 최신 → 로컬 유지, SHA만 업데이트 (GitHub에 push 예약)
+          console.log('Local cache is newer than GitHub, keeping local and pushing...');
+          seedDefaults();
+          applyWeights();
+          sv(); // 로컬 최신 데이터를 GitHub에 재push
+        }
       }
     } catch(e) {
-      console.error('Startup data load failed:', e);
+      console.error('Startup GitHub sync failed, using cached data:', e);
+      if(!S.rv) { S.acc=[]; S.rv=[]; S.pf=[]; }
+      seedDefaults(); applyWeights();
     }
   } else {
     showPg('pg-setup');
