@@ -914,7 +914,8 @@
         "elig": {
           "e1": "yes",
           "e2": "yes",
-          "e3": "yes"
+          "e3": "yes",
+          "e9": "no"
         },
         "docs": {},
         "initSc": {},
