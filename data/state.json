@@ -62,6 +62,13 @@
       "name": "Summer",
       "role": "reviewer",
       "at": "2026-05-08T04:00:37.867Z"
+    },
+    {
+      "id": "gv_ac@visioncreator.co.kr",
+      "email": "gv_ac@visioncreator.co.kr",
+      "name": "ac본부",
+      "role": "reviewer",
+      "at": "2026-05-10T23:51:13.945Z"
     }
   ],
   "rv": [
@@ -1836,5 +1843,6 @@
       "msg": "연결 테스트: _test 1행 전송 완료",
       "at": "2026-05-08 03:59"
     }
-  ]
+  ],
+  "_savedAt": 1778457073946
 }
