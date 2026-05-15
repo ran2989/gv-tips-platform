@@ -1969,7 +1969,7 @@
         },
         "initSc": {},
         "memo": "",
-        "verdict": "pass"
+        "verdict": ""
       },
       "preCompleted": false,
       "sc": {
@@ -2271,5 +2271,5 @@
       "at": "2026-05-08 03:59"
     }
   ],
-  "_savedAt": 1778823488641
+  "_savedAt": 1778823500097
 }
